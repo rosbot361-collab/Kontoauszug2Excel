@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontoauszug2Excel - PDF zu Excel Converter</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 Kontoauszug2Excel</h1>
+            <p class="subtitle">Wandle deine PDF-Kontoauszüge automatisch in Excel um</p>
+        </header>
+
+        <main>
+            <!-- Upload-Formular -->
+            <div id="upload-section" class="card">
+                <h2>PDF hochladen</h2>
+
+                <div class="upload-area" id="dropzone">
+                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <p>Datei hier ablegen oder klicken zum Auswählen</p>
+                    <p class="upload-hint">Nur PDF-Dateien, max. 10 MB</p>
+                    <input type="file" id="file-input" accept=".pdf" hidden>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bank-select">Bank:</label>
+                        <select id="bank-select">
+                            <option value="auto">Automatisch erkennen</option>
+                            <option value="sparkasse">Sparkasse</option>
+                            <option value="ing">ING</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="format-select">Format:</label>
+                        <select id="format-select">
+                            <option value="xlsx">Excel (.xlsx)</option>
+                            <option value="csv">CSV (.csv)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="upload-btn" class="btn btn-primary" disabled>
+                    Konvertieren
+                </button>
+            </div>
+
+            <!-- Progress-Bereich -->
+            <div id="progress-section" class="card" style="display: none;">
+                <h2>Verarbeitung</h2>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <p id="progress-text" class="progress-text">Upload läuft...</p>
+            </div>
+
+            <!-- Ergebnis-Bereich -->
+            <div id="result-section" class="card" style="display: none;">
+                <h2>✅ Fertig!</h2>
+                <p id="result-text"></p>
+                <div class="button-group">
+                    <a id="download-btn" class="btn btn-success" download>
+                        📥 Excel herunterladen
+                    </a>
+                    <button id="delete-btn" class="btn btn-danger">
+                        🗑️ Daten löschen
+                    </button>
+                </div>
+                <button id="new-upload-btn" class="btn btn-secondary">
+                    Neuen Kontoauszug konvertieren
+                </button>
+            </div>
+
+            <!-- Fehler-Bereich -->
+            <div id="error-section" class="card error" style="display: none;">
+                <h2>❌ Fehler</h2>
+                <p id="error-text"></p>
+                <button id="retry-btn" class="btn btn-secondary">
+                    Erneut versuchen
+                </button>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p><strong>DSGVO-konform:</strong> Alle Dateien werden nach 15 Minuten automatisch gelöscht.</p>
+                <p>Keine Speicherung von Nutzerdaten • 100% Privacy</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
