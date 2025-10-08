@@ -10,8 +10,11 @@ def main():
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 
+    # Get the appropriate parser based on the bank
     parser_instance = get_parser(args.bank)
+    # Parses based on the bank selected
     transactions = parser_instance.parse(args.input)
+    # Exports to Excel
     export_to_excel(transactions, args.output)
     print(f"✅ Exported {len(transactions)} transactions to {args.output}")
 
