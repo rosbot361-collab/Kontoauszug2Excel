@@ -31,6 +31,7 @@ services:
       - ./uploads:/app/uploads
       - ./temp:/app/temp
       - ./data:/app/data
+      - ./static:/app/static
     depends_on:
       redis:
         condition: service_healthy

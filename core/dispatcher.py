@@ -9,7 +9,7 @@ def get_parser(bank_name: str):
         return SparkasseParser()
     elif bank_name == "ing":
         return INGParser()
-    elif bank_name in ["db", "deutschebank", "deutsche bank"]:
+    elif bank_name in ["db", "deutschebank", "deutsche bank", "deutsche_bank"]:
         return DBParser()
     else:
         raise ValueError(f"Bank '{bank_name}' wird nicht unterstützt")

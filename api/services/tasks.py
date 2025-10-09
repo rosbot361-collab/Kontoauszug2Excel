@@ -104,10 +104,12 @@ def detect_bank(pdf_path: Path) -> str:
     """
     from parsers.sparkasse_parser import SparkasseParser
     from parsers.ing_parser import INGParser
+    from parsers.db_parser import DBParser
 
     parsers = {
         "sparkasse": SparkasseParser(),
-        "ing": INGParser()
+        "ing": INGParser(),
+        "deutsche_bank": DBParser()
     }
 
     best_bank = None
