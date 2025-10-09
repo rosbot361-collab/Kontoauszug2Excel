@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Konvertierung läuft - KontoExport</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fkontoexpor7968back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.8"></script>
+<script type="module" src="https://static.rocket.new/rocket-shot.js?v=0.0.1"></script>
+</head>
+<body class="bg-background min-h-screen">
+    <!-- Header -->
+    <header class="bg-white border-b border-border shadow-card">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-primary">KontoExport</h1>
+                        <p class="text-sm text-text-secondary">PDF zu Excel Konverter</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="file_upload_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">Dashboard</a>
+                    <a href="conversion_processing.html" class="text-primary font-medium">Verarbeitung</a>
+                    <a href="download_complete.html" class="text-text-secondary hover:text-primary transition-colors">Downloads</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 text-text-secondary hover:text-primary">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 min-h-screen flex items-center justify-center">
+        <div class="max-w-2xl mx-auto w-full">
+            <!-- Processing Card -->
+            <div class="bg-white rounded-xl shadow-card border border-border p-8 text-center">
+                <!-- File Info -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-center space-x-3 mb-4">
+                        <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center">
+                            <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 id="fileName" class="font-semibold text-text-primary">Kontoauszug_Januar_2025.pdf</h3>
+                            <p class="text-sm text-text-secondary">2.4 MB • Wird konvertiert...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Ring -->
+                <div class="relative mb-8">
+                    <div class="flex items-center justify-center">
+                        <div class="relative w-32 h-32">
+                            <!-- Background Circle -->
+                            <svg class="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" stroke="#E5E7EB" stroke-width="8" fill="none"/>
+                                <circle id="progressCircle" cx="60" cy="60" r="54" stroke="#1E3A8A" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="339.292" stroke-dashoffset="339.292" class="transition-all duration-300 ease-out"/>
+                            </svg>
+                            <!-- Progress Percentage -->
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div id="progressPercent" class="text-2xl font-bold text-primary">0%</div>
+                                    <div class="text-xs text-text-secondary">Fortschritt</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Message -->
+                <div class="mb-8">
+                    <h2 id="statusTitle" class="text-xl font-semibold text-text-primary mb-2">Konvertierung wird vorbereitet...</h2>
+                    <p id="statusMessage" class="text-text-secondary mb-4">Ihre PDF-Datei wird analysiert und für die Konvertierung vorbereitet.</p>
+                    
+                    <!-- Estimated Time -->
+                    <div class="flex items-center justify-center space-x-2 text-sm text-text-secondary">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span id="estimatedTime">Geschätzte Zeit: 30-45 Sekunden</span>
+                    </div>
+                </div>
+
+                <!-- Processing Steps -->
+                <div class="mb-8">
+                    <div class="space-y-3">
+                        <div id="step1" class="flex items-center space-x-3 p-3 rounded-lg bg-primary-50 border border-primary-100">
+                            <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                </svg>
+                            </div>
+                            <span class="text-primary font-medium">Analysiere PDF-Struktur</span>
+                        </div>
+                        
+                        <div id="step2" class="flex items-center space-x-3 p-3 rounded-lg bg-surface-100">
+                            <div class="w-6 h-6 bg-surface-200 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-xs text-text-secondary">2</span>
+                            </div>
+                            <span class="text-text-secondary">Extrahiere Transaktionsdaten</span>
+                        </div>
+                        
+                        <div id="step3" class="flex items-center space-x-3 p-3 rounded-lg bg-surface-100">
+                            <div class="w-6 h-6 bg-surface-200 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-xs text-text-secondary">3</span>
+                            </div>
+                            <span class="text-text-secondary">Konvertiere zu Excel-Format</span>
+                        </div>
+                        
+                        <div id="step4" class="flex items-center space-x-3 p-3 rounded-lg bg-surface-100">
+                            <div class="w-6 h-6 bg-surface-200 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-xs text-text-secondary">4</span>
+                            </div>
+                            <span class="text-text-secondary">Bereite Download vor</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Message -->
+                <div class="bg-accent-50 border border-accent-100 rounded-lg p-4 mb-6">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h4 class="font-semibold text-accent mb-1">DSGVO-konforme Verarbeitung</h4>
+                            <p class="text-sm text-accent-600">
+                                Ihre Daten werden verschlüsselt übertragen und nach der Konvertierung automatisch von unseren Servern gelöscht. 
+                                Keine Speicherung, keine Weitergabe an Dritte.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cancel Button -->
+                <div class="flex justify-center">
+                    <button onclick="cancelConversion()" class="px-6 py-3 border border-border rounded-lg font-medium text-text-primary hover:bg-surface-50 transition-colors">
+                        <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                        Konvertierung abbrechen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Processing Complete (Hidden initially) -->
+            <div id="completionCard" class="hidden bg-white rounded-xl shadow-card border border-border p-8 text-center">
+                <div class="mb-6">
+                    <div class="w-16 h-16 bg-success rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-success mb-2">Konvertierung erfolgreich!</h2>
+                    <p class="text-text-secondary">Ihre Excel-Datei ist bereit zum Download.</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="download_complete.html" class="btn-primary">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4m-6 4H6a2 2 0 01-2-2V7a2 2 0 012-2h6l4 4v5a2 2 0 01-2 2z"/>
+                        </svg>
+                        Datei herunterladen
+                    </a>
+                    <a href="file_upload_dashboard.html" class="px-6 py-3 border border-border rounded-lg font-medium text-text-primary hover:bg-surface-50 transition-colors">
+                        Neue Datei hochladen
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface border-t border-border mt-16">
+        <div class="container mx-auto px-4 py-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <span class="font-bold text-primary">KontoExport</span>
+                </div>
+                <p class="text-sm text-text-secondary mb-4">
+                    Sichere und einfache Konvertierung von PDF-Kontoauszügen zu Excel-Dateien
+                </p>
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-text-secondary">
+                    <a href="javascript:void(0)" class="hover:text-primary transition-colors">Datenschutz</a>
+                    <a href="javascript:void(0)" class="hover:text-primary transition-colors">Impressum</a>
+                    <a href="javascript:void(0)" class="hover:text-primary transition-colors">AGB</a>
+                    <a href="javascript:void(0)" class="hover:text-primary transition-colors">Kontakt</a>
+                </div>
+                <p class="text-xs text-text-tertiary mt-4">
+                    © 2025 KontoExport. Alle Rechte vorbehalten.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentStep = 1;
+        let progress = 0;
+        let conversionInterval;
+        let isProcessing = true;
+
+        // Processing steps configuration
+        const processingSteps = [
+            {
+                title: "Analysiere PDF-Struktur",
+                message: "Die PDF-Datei wird gescannt und die Datenstruktur analysiert.",
+                duration: 25
+            },
+            {
+                title: "Extrahiere Transaktionsdaten", 
+                message: "Transaktionsdaten werden aus der PDF-Datei extrahiert und validiert.",
+                duration: 35
+            },
+            {
+                title: "Konvertiere zu Excel-Format",
+                message: "Die Daten werden in ein strukturiertes Excel-Format konvertiert.",
+                duration: 30
+            },
+            {
+                title: "Bereite Download vor",
+                message: "Die Excel-Datei wird finalisiert und für den Download vorbereitet.",
+                duration: 10
+            }
+        ];
+
+        // Start processing simulation
+        function startProcessing() {
+            conversionInterval = setInterval(updateProgress, 200);
+        }
+
+        function updateProgress() {
+            if (!isProcessing) return;
+
+            // Increment progress
+            progress += Math.random() * 2;
+            
+            // Update progress ring and percentage
+            updateProgressRing(progress);
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+
+            // Update processing steps
+            updateProcessingSteps();
+
+            // Check if processing is complete
+            if (progress >= 100) {
+                completeProcessing();
+            }
+        }
+
+        function updateProgressRing(percentage) {
+            const circle = document.getElementById('progressCircle');
+            const circumference = 339.292; // 2 * π * 54
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
+
+        function updateProcessingSteps() {
+            let stepProgress = 0;
+            let currentStepIndex = 0;
+
+            // Determine current step based on progress
+            for (let i = 0; i < processingSteps.length; i++) {
+                stepProgress += processingSteps[i].duration;
+                if (progress <= stepProgress) {
+                    currentStepIndex = i;
+                    break;
+                }
+            }
+
+            // Update status title and message
+            document.getElementById('statusTitle').textContent = processingSteps[currentStepIndex].title;
+            document.getElementById('statusMessage').textContent = processingSteps[currentStepIndex].message;
+
+            // Update step visual states
+            for (let i = 1; i <= 4; i++) {
+                const stepElement = document.getElementById(`step${i}`);
+                const stepCircle = stepElement.querySelector('div');
+                const stepText = stepElement.querySelector('span');
+
+                if (i <= currentStepIndex + 1) {
+                    // Active step
+                    stepElement.className = 'flex items-center space-x-3 p-3 rounded-lg bg-primary-50 border border-primary-100';
+                    stepCircle.className = 'w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0';
+                    stepText.className = 'text-primary font-medium';
+                    
+                    if (i === currentStepIndex + 1) {
+                        // Currently processing step - add spinner
+                        stepCircle.innerHTML = `
+                            <svg class="w-4 h-4 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        `;
+                    } else if (i < currentStepIndex + 1) {
+                        // Completed step - add checkmark
+                        stepCircle.innerHTML = `
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        `;
+                    }
+                } else {
+                    // Pending step
+                    stepElement.className = 'flex items-center space-x-3 p-3 rounded-lg bg-surface-100';
+                    stepCircle.className = 'w-6 h-6 bg-surface-200 rounded-full flex items-center justify-center flex-shrink-0';
+                    stepCircle.innerHTML = `<span class="text-xs text-text-secondary">${i}</span>`;
+                    stepText.className = 'text-text-secondary';
+                }
+            }
+
+            // Update estimated time
+            const remainingTime = Math.max(0, 45 - Math.round(progress * 0.45));
+            document.getElementById('estimatedTime').textContent = `Geschätzte Zeit: ${remainingTime} Sekunden verbleibend`;
+        }
+
+        function completeProcessing() {
+            clearInterval(conversionInterval);
+            isProcessing = false;
+            progress = 100;
+            
+            // Update final progress
+            updateProgressRing(100);
+            document.getElementById('progressPercent').textContent = '100%';
+            
+            // Mark all steps as complete
+            for (let i = 1; i <= 4; i++) {
+                const stepElement = document.getElementById(`step${i}`);
+                const stepCircle = stepElement.querySelector('div');
+                const stepText = stepElement.querySelector('span');
+                
+                stepElement.className = 'flex items-center space-x-3 p-3 rounded-lg bg-success-50 border border-success-100';
+                stepCircle.className = 'w-6 h-6 bg-success rounded-full flex items-center justify-center flex-shrink-0';
+                stepCircle.innerHTML = `
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                `;
+                stepText.className = 'text-success font-medium';
+            }
+
+            // Show completion after a brief delay
+            setTimeout(() => {
+                document.querySelector('.bg-white.rounded-xl.shadow-card.border.border-border.p-8.text-center').style.display = 'none';
+                document.getElementById('completionCard').classList.remove('hidden');
+                document.getElementById('completionCard').classList.add('fade-in');
+            }, 1500);
+        }
+
+        function cancelConversion() {
+            if (confirm('Möchten Sie die Konvertierung wirklich abbrechen?')) {
+                clearInterval(conversionInterval);
+                isProcessing = false;
+                window.location.href = 'file_upload_dashboard.html';
+            }
+        }
+
+        // Start processing when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Small delay to show initial state
+            setTimeout(startProcessing, 1000);
+        });
+
+        // Handle page visibility change (pause/resume processing)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && isProcessing) {
+                clearInterval(conversionInterval);
+            } else if (!document.hidden && isProcessing && progress < 100) {
+                conversionInterval = setInterval(updateProgress, 200);
+            }
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>

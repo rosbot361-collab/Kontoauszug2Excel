@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Download Abgeschlossen - KontoExport</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fkontoexpor7968back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.8"></script>
+<script type="module" src="https://static.rocket.new/rocket-shot.js?v=0.0.1"></script>
+</head>
+<body class="bg-background min-h-screen">
+    <!-- Header -->
+    <header class="bg-white border-b border-border shadow-card">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-primary">KontoExport</h1>
+                        <p class="text-sm text-text-secondary">PDF zu Excel Konverter</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="file_upload_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">Dashboard</a>
+                    <a href="conversion_processing.html" class="text-text-secondary hover:text-primary transition-colors">Verarbeitung</a>
+                    <a href="download_complete.html" class="text-primary font-medium">Downloads</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 text-text-secondary hover:text-primary">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Success Hero Section -->
+        <section class="text-center mb-12">
+            <div class="max-w-2xl mx-auto">
+                <div class="w-20 h-20 bg-success rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <h2 class="text-4xl font-bold text-primary mb-4">Konvertierung erfolgreich!</h2>
+                <p class="text-lg text-text-secondary">
+                    Ihre PDF-Datei wurde erfolgreich in eine Excel-Datei konvertiert und steht zum Download bereit.
+                </p>
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section class="max-w-4xl mx-auto mb-12">
+            <div class="bg-white rounded-xl shadow-card border border-border p-8">
+                <!-- File Information -->
+                <div class="bg-success-50 rounded-lg p-6 border border-success-100 mb-8">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-success rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-success mb-2">Datei bereit zum Download</h3>
+                            <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-text-secondary mb-1">Original PDF:</p>
+                                    <p class="font-medium text-text-primary">kontoauszug_sparkasse_oktober_2024.pdf</p>
+                                </div>
+                                <div>
+                                    <p class="text-text-secondary mb-1">Excel-Datei:</p>
+                                    <p class="font-medium text-text-primary">kontoauszug_2024_01.xlsx</p>
+                                </div>
+                                <div>
+                                    <p class="text-text-secondary mb-1">Dateigröße:</p>
+                                    <p class="font-medium text-text-primary">245 KB</p>
+                                </div>
+                                <div>
+                                    <p class="text-text-secondary mb-1">Erstellt am:</p>
+                                    <p class="font-medium text-text-primary">09.10.2025, 12:43 Uhr</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Button -->
+                <div class="text-center mb-8">
+                    <button onclick="downloadFile()" class="btn-primary text-lg px-8 py-4 mb-4">
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4m-6 4H6a2 2 0 01-2-2V7a2 2 0 012-2h6l4 4v5a2 2 0 01-2 2z"/>
+                        </svg>
+                        Excel-Datei herunterladen
+                    </button>
+                    <p class="text-sm text-text-secondary">
+                        Klicken Sie auf den Button, um Ihre konvertierte Excel-Datei herunterzuladen
+                    </p>
+                </div>
+
+                <!-- Conversion Statistics -->
+                <div class="bg-surface-50 rounded-lg p-6 border border-border mb-8">
+                    <h4 class="font-semibold text-text-primary mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        Konvertierungsstatistiken
+                    </h4>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary mb-1">3</div>
+                            <p class="text-sm text-text-secondary">Seiten verarbeitet</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-accent mb-1">47</div>
+                            <p class="text-sm text-text-secondary">Transaktionen extrahiert</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-secondary mb-1">100%</div>
+                            <p class="text-sm text-text-secondary">Erfolgsrate</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="file_upload_dashboard.html" class="px-6 py-3 border border-border rounded-lg font-medium text-text-primary hover:bg-surface-50 transition-colors text-center">
+                        <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Weitere Datei konvertieren
+                    </a>
+                    <button onclick="shareResults()" class="px-6 py-3 border border-border rounded-lg font-medium text-text-primary hover:bg-surface-50 transition-colors">
+                        <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+                        </svg>
+                        Ergebnis teilen
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- File Availability Information -->
+        <section class="max-w-4xl mx-auto mb-12">
+            <div class="bg-warning-50 rounded-lg p-6 border border-warning-100">
+                <div class="flex items-start space-x-3">
+                    <svg class="w-6 h-6 text-warning flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div>
+                        <h4 class="font-semibold text-warning mb-2">Wichtige Informationen zur Dateiverfügbarkeit</h4>
+                        <ul class="text-sm text-warning-600 space-y-1">
+                            <li>• Ihre konvertierte Datei ist für <strong>24 Stunden</strong> zum Download verfügbar</li>
+                            <li>• Nach Ablauf wird die Datei automatisch und sicher von unseren Servern gelöscht</li>
+                            <li>• Laden Sie die Datei jetzt herunter, um sicherzustellen, dass Sie sie nicht verlieren</li>
+                            <li>• Bei Bedarf können Sie jederzeit eine neue Konvertierung durchführen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security & Compliance -->
+        <section class="max-w-4xl mx-auto mb-12">
+            <div class="bg-white rounded-xl shadow-card border border-border p-8">
+                <h3 class="text-xl font-semibold text-primary mb-6 text-center">Sicherheit & Datenschutz</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-accent-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold text-text-primary mb-2">DSGVO-konform</h4>
+                        <p class="text-sm text-text-secondary">Alle Daten werden nach EU-Datenschutzstandards verarbeitet und automatisch gelöscht.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold text-text-primary mb-2">Automatische Löschung</h4>
+                        <p class="text-sm text-text-secondary">Keine permanente Speicherung Ihrer Finanzdaten auf unseren Servern.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips & Next Steps -->
+        <section class="max-w-4xl mx-auto">
+            <div class="bg-surface rounded-xl p-8 border border-border">
+                <h3 class="text-xl font-semibold text-primary mb-6">Tipps für die weitere Verwendung</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span class="text-white text-xs font-bold">1</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-text-primary mb-1">Excel-Datei öffnen</h4>
+                                <p class="text-sm text-text-secondary">Öffnen Sie die Datei in Microsoft Excel, Google Sheets oder LibreOffice Calc.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span class="text-white text-xs font-bold">2</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-text-primary mb-1">Daten überprüfen</h4>
+                                <p class="text-sm text-text-secondary">Kontrollieren Sie die extrahierten Transaktionsdaten auf Vollständigkeit.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span class="text-white text-xs font-bold">3</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-text-primary mb-1">In Buchhaltung importieren</h4>
+                                <p class="text-sm text-text-secondary">Importieren Sie die Daten direkt in Ihre Buchhaltungssoftware.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-6 h-6 bg-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span class="text-white text-xs font-bold">4</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-text-primary mb-1">Backup erstellen</h4>
+                                <p class="text-sm text-text-secondary">Speichern Sie eine Kopie der Excel-Datei für Ihre Unterlagen.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface border-t border-border mt-16">
+        <div class="container mx-auto px-4 py-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <span class="font-bold text-primary">KontoExport</span>
+                </div>
+                <p class="text-sm text-text-secondary mb-4">
+                    Sichere und einfache Konvertierung von PDF-Kontoauszügen zu Excel-Dateien
+                </p>
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-text-secondary">
+                    <a href="javascript:void(0)" class="hover:text-primary transition-colors">Datenschutz</a>
+                    <a href="javascript:void(0)" class="hover:text-primary transition-colors">Impressum</a>
+                    <a href="javascript:void(0)" class="hover:text-primary transition-colors">AGB</a>
+                    <a href="javascript:void(0)" class="hover:text-primary transition-colors">Kontakt</a>
+                </div>
+                <p class="text-xs text-text-tertiary mt-4">
+                    © 2025 KontoExport. Alle Rechte vorbehalten.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="downloadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md mx-4 shadow-modal">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-success rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-text-primary mb-2">Download gestartet!</h3>
+                <p class="text-sm text-text-secondary mb-6">
+                    Ihre Excel-Datei wird heruntergeladen. Überprüfen Sie Ihren Download-Ordner.
+                </p>
+                <button onclick="closeModal()" class="btn-primary">
+                    Verstanden
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function downloadFile() {
+            // Show download modal
+            document.getElementById('downloadModal').classList.remove('hidden');
+            document.getElementById('downloadModal').classList.add('flex');
+            
+            // Simulate file download
+            setTimeout(() => {
+                // Create a temporary download link
+                const link = document.createElement('a');
+                link.href = 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,UEsDBBQAAAAIAA=='; // Mock Excel data
+                link.download = 'kontoauszug_2024_01.xlsx';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }, 1000);
+        }
+
+        function closeModal() {
+            document.getElementById('downloadModal').classList.add('hidden');
+            document.getElementById('downloadModal').classList.remove('flex');
+        }
+
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'KontoExport - Erfolgreiche Konvertierung',
+                    text: 'Ich habe erfolgreich meine PDF-Kontoauszüge mit KontoExport in Excel konvertiert!',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const url = window.location.href;
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('Link wurde in die Zwischenablage kopiert!');
+                });
+            }
+        }
+
+        // Auto-close modal when clicking outside
+        document.getElementById('downloadModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Keyboard support for modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Add download animation effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadButton = document.querySelector('.btn-primary');
+            downloadButton.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            downloadButton.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
