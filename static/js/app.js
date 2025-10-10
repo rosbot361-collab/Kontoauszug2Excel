@@ -1,85 +1,191 @@
-// Kontoauszug2Excel Frontend
+// KontoExport - Single Page Application
 const API_BASE = window.location.origin;
 
-// DOM-Elemente
-const fileInput = document.getElementById('file-input');
-const dropzone = document.getElementById('dropzone');
-const uploadBtn = document.getElementById('upload-btn');
-const bankSelect = document.getElementById('bank-select');
-const formatSelect = document.getElementById('format-select');
-
-const uploadSection = document.getElementById('upload-section');
-const progressSection = document.getElementById('progress-section');
-const resultSection = document.getElementById('result-section');
-const errorSection = document.getElementById('error-section');
-
-const progressBar = document.getElementById('progress-bar');
-const progressText = document.getElementById('progress-text');
-const resultText = document.getElementById('result-text');
-const errorText = document.getElementById('error-text');
-
-const downloadBtn = document.getElementById('download-btn');
-const deleteBtn = document.getElementById('delete-btn');
-const newUploadBtn = document.getElementById('new-upload-btn');
-const retryBtn = document.getElementById('retry-btn');
-
+// Global State
 let selectedFile = null;
 let currentJobId = null;
 let pollInterval = null;
 
-// Event-Listener
-dropzone.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', handleFileSelect);
-uploadBtn.addEventListener('click', handleUpload);
-deleteBtn.addEventListener('click', handleDelete);
-newUploadBtn.addEventListener('click', resetUI);
-retryBtn.addEventListener('click', resetUI);
+// DOM Elements
+let fileInput, uploadZone, uploadButton, bankSelect, formatSelect;
+let uploadState, processingState, completeState, errorState;
 
-// Drag & Drop
-dropzone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropzone.classList.add('dragover');
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - Initializing...');
+
+    // Get DOM Elements after page loads
+    fileInput = document.getElementById('fileInput');
+    uploadZone = document.getElementById('uploadZone');
+    uploadButton = document.getElementById('uploadButton');
+    bankSelect = document.getElementById('bankSelect');
+    formatSelect = document.getElementById('formatSelect');
+
+    uploadState = document.getElementById('uploadState');
+    processingState = document.getElementById('processingState');
+    completeState = document.getElementById('completeState');
+    errorState = document.getElementById('errorState');
+
+    console.log('Elements found:', {
+        fileInput: !!fileInput,
+        uploadZone: !!uploadZone,
+        uploadButton: !!uploadButton,
+        bankSelect: !!bankSelect,
+        formatSelect: !!formatSelect
+    });
+
+    setupEventListeners();
+    console.log('Event listeners setup complete');
 });
 
-dropzone.addEventListener('dragleave', () => {
-    dropzone.classList.remove('dragover');
-});
+function setupEventListeners() {
+    console.log('Setting up event listeners...');
 
-dropzone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropzone.classList.remove('dragover');
-
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-        handleFile(files[0]);
+    // File Input
+    if (fileInput) {
+        fileInput.addEventListener('change', handleFileSelect);
+        console.log('File input listener added');
     }
-});
 
-// Datei-Auswahl
-function handleFileSelect(e) {
-    handleFile(e.target.files[0]);
+    // Upload Zone Click
+    if (uploadZone) {
+        uploadZone.addEventListener('click', function() {
+            console.log('Upload zone clicked');
+            fileInput.click();
+        });
+        console.log('Upload zone click listener added');
+
+        // Drag & Drop
+        uploadZone.addEventListener('dragover', handleDragOver);
+        uploadZone.addEventListener('dragleave', handleDragLeave);
+        uploadZone.addEventListener('drop', handleDrop);
+        console.log('Drag & drop listeners added');
+    }
+
+    // Upload Button
+    uploadButton.addEventListener('click', startUpload);
+
+    // Remove File Button
+    const removeFileBtn = document.getElementById('removeFileBtn');
+    if (removeFileBtn) {
+        removeFileBtn.addEventListener('click', removeFile);
+    }
+
+    // Complete State Buttons
+    const deleteBtn = document.getElementById('deleteBtn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', deleteAndReset);
+    }
+
+    const newConversionBtn = document.getElementById('newConversionBtn');
+    if (newConversionBtn) {
+        newConversionBtn.addEventListener('click', resetToUpload);
+    }
+
+    // Error State Button
+    const retryBtn = document.getElementById('retryBtn');
+    if (retryBtn) {
+        retryBtn.addEventListener('click', resetToUpload);
+    }
 }
 
-function handleFile(file) {
-    if (!file) return;
+// File Handling
+function handleFileSelect(event) {
+    console.log('File selected via input');
+    const file = event.target.files[0];
+    if (file) {
+        console.log('File:', file.name, file.size, 'bytes');
+        processFile(file);
+    }
+}
 
-    if (!file.name.endsWith('.pdf')) {
+function handleDragOver(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log('Drag over');
+    uploadZone.classList.add('active');
+}
+
+function handleDragLeave(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log('Drag leave');
+    uploadZone.classList.remove('active');
+}
+
+function handleDrop(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log('File dropped');
+    uploadZone.classList.remove('active');
+
+    const file = event.dataTransfer.files[0];
+    if (file) {
+        console.log('Dropped file:', file.name, file.size, 'bytes');
+        processFile(file);
+    }
+}
+
+function processFile(file) {
+    // Validate file type
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
         showError('Bitte nur PDF-Dateien hochladen.');
         return;
     }
 
+    // Validate file size (10 MB)
     if (file.size > 10 * 1024 * 1024) {
-        showError('Datei zu groß. Max. 10 MB erlaubt.');
+        showError('Datei zu groß. Maximale Größe: 10 MB');
         return;
     }
 
     selectedFile = file;
-    dropzone.querySelector('p').textContent = `✅ ${file.name}`;
-    uploadBtn.disabled = false;
+    displayFileInfo(file);
+    enableUploadButton();
 }
 
-// Upload
-async function handleUpload() {
+function displayFileInfo(file) {
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+
+    fileName.textContent = file.name;
+    fileSize.textContent = formatFileSize(file.size);
+
+    fileInfo.classList.remove('hidden');
+    uploadZone.style.display = 'none';
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+function enableUploadButton() {
+    uploadButton.disabled = false;
+    uploadButton.classList.remove('opacity-50', 'cursor-not-allowed');
+    uploadButton.classList.add('hover:scale-105');
+}
+
+function removeFile(event) {
+    if (event) event.preventDefault();
+
+    selectedFile = null;
+    fileInput.value = '';
+
+    document.getElementById('fileInfo').classList.add('hidden');
+    uploadZone.style.display = 'block';
+
+    uploadButton.disabled = true;
+    uploadButton.classList.add('opacity-50', 'cursor-not-allowed');
+    uploadButton.classList.remove('hover:scale-105');
+}
+
+// Upload & Processing
+async function startUpload() {
     if (!selectedFile) return;
 
     const formData = new FormData();
@@ -87,7 +193,9 @@ async function handleUpload() {
     formData.append('bank', bankSelect.value);
     formData.append('output_format', formatSelect.value);
 
-    showProgress();
+    // Switch to processing state
+    showState('processing');
+    updateProcessingStatus('Upload läuft...', 10);
 
     try {
         const response = await fetch(`${API_BASE}/api/upload`, {
@@ -103,15 +211,28 @@ async function handleUpload() {
         const job = await response.json();
         currentJobId = job.job_id;
 
-        progressText.textContent = 'PDF wird verarbeitet...';
+        updateProcessingStatus('PDF wird analysiert...', 33);
         startPolling();
 
     } catch (error) {
+        console.error('Upload error:', error);
         showError(error.message);
     }
 }
 
-// Job-Status abfragen
+// Job Status Polling
+function startPolling() {
+    pollInterval = setInterval(checkJobStatus, 2000); // Every 2 seconds
+    checkJobStatus(); // First check immediately
+}
+
+function stopPolling() {
+    if (pollInterval) {
+        clearInterval(pollInterval);
+        pollInterval = null;
+    }
+}
+
 async function checkJobStatus() {
     if (!currentJobId) return;
 
@@ -126,18 +247,16 @@ async function checkJobStatus() {
 
         switch (job.status) {
             case 'pending':
-                progressText.textContent = 'Warte auf Verarbeitung...';
-                progressBar.style.width = '33%';
+                updateProcessingStatus('Warte auf Verarbeitung...', 33);
                 break;
 
             case 'processing':
-                progressText.textContent = 'PDF wird analysiert...';
-                progressBar.style.width = '66%';
+                updateProcessingStatus('PDF wird verarbeitet...', 66);
                 break;
 
             case 'completed':
                 stopPolling();
-                showResult(job);
+                showComplete(job);
                 break;
 
             case 'failed':
@@ -147,62 +266,80 @@ async function checkJobStatus() {
         }
 
     } catch (error) {
+        console.error('Status check error:', error);
         stopPolling();
         showError(error.message);
     }
 }
 
-// Polling starten/stoppen
-function startPolling() {
-    pollInterval = setInterval(checkJobStatus, 2000); // Alle 2 Sekunden
-    checkJobStatus(); // Erste Abfrage sofort
+function updateProcessingStatus(message, progress) {
+    document.getElementById('processingStatus').textContent = message;
+    document.getElementById('progressFill').style.width = progress + '%';
 }
 
-function stopPolling() {
-    if (pollInterval) {
-        clearInterval(pollInterval);
-        pollInterval = null;
+// State Management
+function showState(state) {
+    // Hide all states
+    uploadState.classList.add('hidden');
+    processingState.classList.add('hidden');
+    completeState.classList.add('hidden');
+    errorState.classList.add('hidden');
+
+    // Show requested state
+    switch(state) {
+        case 'upload':
+            uploadState.classList.remove('hidden');
+            break;
+        case 'processing':
+            processingState.classList.remove('hidden');
+            break;
+        case 'complete':
+            completeState.classList.remove('hidden');
+            break;
+        case 'error':
+            errorState.classList.remove('hidden');
+            break;
     }
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Ergebnis anzeigen
-function showResult(job) {
-    uploadSection.style.display = 'none';
-    progressSection.style.display = 'none';
-    errorSection.style.display = 'none';
-    resultSection.style.display = 'block';
+function showComplete(job) {
+    const bankName = formatBankName(job.bank || 'auto');
 
-    const bank = job.bank || 'unbekannte Bank';
-    resultText.textContent = `Kontoauszug erfolgreich konvertiert! (${bank})`;
+    document.getElementById('detectedBank').textContent = bankName;
+    document.getElementById('completeInfo').textContent =
+        `Ihre Datei wurde erfolgreich konvertiert (${job.output_format || 'xlsx'})`;
 
+    const downloadBtn = document.getElementById('downloadButton');
     downloadBtn.href = `${API_BASE}/api/download/${currentJobId}`;
-    downloadBtn.download = `kontoauszug_${currentJobId.slice(0, 8)}.${job.output_format}`;
+    downloadBtn.download = `kontoauszug_${currentJobId.slice(0, 8)}.${job.output_format || 'xlsx'}`;
+
+    showState('complete');
 }
 
-// Fehler anzeigen
 function showError(message) {
-    uploadSection.style.display = 'none';
-    progressSection.style.display = 'none';
-    resultSection.style.display = 'none';
-    errorSection.style.display = 'block';
-
-    errorText.textContent = message;
+    document.getElementById('errorMessage').textContent = message;
+    showState('error');
 }
 
-// Progress anzeigen
-function showProgress() {
-    uploadSection.style.display = 'none';
-    errorSection.style.display = 'none';
-    resultSection.style.display = 'none';
-    progressSection.style.display = 'block';
-
-    progressBar.style.width = '10%';
-    progressText.textContent = 'Upload läuft...';
+function formatBankName(bank) {
+    const bankNames = {
+        'sparkasse': 'Sparkasse',
+        'ing': 'ING',
+        'deutsche_bank': 'Deutsche Bank',
+        'auto': 'Automatisch erkannt'
+    };
+    return bankNames[bank.toLowerCase()] || bank;
 }
 
-// Daten löschen
-async function handleDelete() {
-    if (!currentJobId) return;
+// Actions
+async function deleteAndReset() {
+    if (!currentJobId) {
+        resetToUpload();
+        return;
+    }
 
     try {
         const response = await fetch(`${API_BASE}/api/download/${currentJobId}`, {
@@ -210,27 +347,36 @@ async function handleDelete() {
         });
 
         if (response.ok) {
-            alert('✅ Alle Daten wurden erfolgreich gelöscht.');
-            resetUI();
+            console.log('Job deleted successfully');
         }
-
     } catch (error) {
-        alert('Fehler beim Löschen: ' + error.message);
+        console.error('Delete error:', error);
     }
+
+    resetToUpload();
 }
 
-// UI zurücksetzen
-function resetUI() {
-    uploadSection.style.display = 'block';
-    progressSection.style.display = 'none';
-    resultSection.style.display = 'none';
-    errorSection.style.display = 'none';
+function resetToUpload() {
+    // Stop any polling
+    stopPolling();
 
+    // Reset state
     selectedFile = null;
     currentJobId = null;
     fileInput.value = '';
-    dropzone.querySelector('p').textContent = 'Datei hier ablegen oder klicken zum Auswählen';
-    uploadBtn.disabled = true;
 
-    stopPolling();
+    // Reset file info
+    document.getElementById('fileInfo').classList.add('hidden');
+    uploadZone.style.display = 'block';
+
+    // Reset button
+    uploadButton.disabled = true;
+    uploadButton.classList.add('opacity-50', 'cursor-not-allowed');
+    uploadButton.classList.remove('hover:scale-105');
+
+    // Reset progress
+    document.getElementById('progressFill').style.width = '0%';
+
+    // Show upload state
+    showState('upload');
 }
