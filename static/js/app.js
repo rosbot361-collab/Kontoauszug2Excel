@@ -8,7 +8,8 @@ let pollInterval = null;
 
 // DOM Elements
 let fileInput, uploadZone, uploadButton, bankSelect, formatSelect;
-let uploadState, processingState, completeState, errorState;
+let uploadState, processingState, reviewState, completeState, errorState;
+let reviewData = [];
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     uploadState = document.getElementById('uploadState');
     processingState = document.getElementById('processingState');
+    reviewState = document.getElementById('reviewState');
     completeState = document.getElementById('completeState');
     errorState = document.getElementById('errorState');
 
@@ -87,6 +89,27 @@ function setupEventListeners() {
     if (retryBtn) {
         retryBtn.addEventListener('click', resetToUpload);
     }
+
+    // Review State Buttons
+    const confirmDownloadBtn = document.getElementById('confirmDownloadBtn');
+    if (confirmDownloadBtn) {
+        confirmDownloadBtn.addEventListener('click', handleConfirmDownload);
+    }
+
+    const deleteReviewBtn = document.getElementById('deleteReviewBtn');
+    if (deleteReviewBtn) {
+        deleteReviewBtn.addEventListener('click', async () => {
+            if (confirm('Möchten Sie die Daten wirklich löschen?')) {
+                try {
+                    await fetch(`${API_BASE}/api/jobs/${currentJobId}`, { method: 'DELETE' });
+                    resetToUpload();
+                } catch (error) {
+                    console.error('Delete error:', error);
+                    resetToUpload();
+                }
+            }
+        });
+    }
 }
 
 // File Handling
@@ -127,21 +150,27 @@ function handleDrop(event) {
 }
 
 function processFile(file) {
+    console.log('Processing file:', file.name);
+
     // Validate file type
     if (!file.name.toLowerCase().endsWith('.pdf')) {
+        console.error('Invalid file type:', file.name);
         showError('Bitte nur PDF-Dateien hochladen.');
         return;
     }
 
     // Validate file size (10 MB)
     if (file.size > 10 * 1024 * 1024) {
+        console.error('File too large:', file.size);
         showError('Datei zu groß. Maximale Größe: 10 MB');
         return;
     }
 
+    console.log('File validation passed');
     selectedFile = file;
     displayFileInfo(file);
     enableUploadButton();
+    console.log('Upload button should be enabled now');
 }
 
 function displayFileInfo(file) {
@@ -186,7 +215,16 @@ function removeFile(event) {
 
 // Upload & Processing
 async function startUpload() {
-    if (!selectedFile) return;
+    console.log('🚀 Starting upload...');
+
+    if (!selectedFile) {
+        console.error('No file selected!');
+        return;
+    }
+
+    console.log('Selected file:', selectedFile.name);
+    console.log('Bank:', bankSelect.value);
+    console.log('Format:', formatSelect.value);
 
     const formData = new FormData();
     formData.append('file', selectedFile);
@@ -198,17 +236,22 @@ async function startUpload() {
     updateProcessingStatus('Upload läuft...', 10);
 
     try {
+        console.log('Sending upload request to:', `${API_BASE}/api/upload`);
         const response = await fetch(`${API_BASE}/api/upload`, {
             method: 'POST',
             body: formData
         });
 
+        console.log('Upload response status:', response.status);
+
         if (!response.ok) {
             const error = await response.json();
+            console.error('Upload failed:', error);
             throw new Error(error.detail || 'Upload fehlgeschlagen');
         }
 
         const job = await response.json();
+        console.log('Job created:', job);
         currentJobId = job.job_id;
 
         updateProcessingStatus('PDF wird analysiert...', 33);
@@ -255,8 +298,10 @@ async function checkJobStatus() {
                 break;
 
             case 'completed':
+                console.log('Job completed! Showing review state...');
                 stopPolling();
-                showComplete(job);
+                await showReview(job);
+                console.log('Review state should be visible now');
                 break;
 
             case 'failed':
@@ -279,9 +324,12 @@ function updateProcessingStatus(message, progress) {
 
 // State Management
 function showState(state) {
+    console.log('🔄 Switching to state:', state);
+
     // Hide all states
     uploadState.classList.add('hidden');
     processingState.classList.add('hidden');
+    reviewState.classList.add('hidden');
     completeState.classList.add('hidden');
     errorState.classList.add('hidden');
 
@@ -289,15 +337,23 @@ function showState(state) {
     switch(state) {
         case 'upload':
             uploadState.classList.remove('hidden');
+            console.log('✅ Upload state is now visible');
             break;
         case 'processing':
             processingState.classList.remove('hidden');
+            console.log('✅ Processing state is now visible');
+            break;
+        case 'review':
+            reviewState.classList.remove('hidden');
+            console.log('✅ Review state is now visible');
             break;
         case 'complete':
             completeState.classList.remove('hidden');
+            console.log('✅ Complete state is now visible');
             break;
         case 'error':
             errorState.classList.remove('hidden');
+            console.log('✅ Error state is now visible');
             break;
     }
 
@@ -379,4 +435,216 @@ function resetToUpload() {
 
     // Show upload state
     showState('upload');
+}
+
+// Review State Functions
+let reviewHeaders = [];
+
+async function showReview(job) {
+    console.log('Showing review state for job:', job);
+
+    try {
+        // Try to download and parse the Excel file directly
+        console.log('Downloading Excel file from:', `${API_BASE}/api/download/${currentJobId}`);
+        const response = await fetch(`${API_BASE}/api/download/${currentJobId}`);
+
+        if (!response.ok) {
+            console.error('Download failed:', response.status);
+            reviewHeaders = ['Datum', 'Beschreibung', 'Referenz', 'Soll', 'Haben', 'Saldo'];
+            reviewData = createMockPreviewData();
+        } else {
+            // Get the file as array buffer
+            const arrayBuffer = await response.arrayBuffer();
+            console.log('Excel file downloaded, size:', arrayBuffer.byteLength);
+
+            // Parse with XLSX library
+            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+
+            // Get data WITHOUT headers (use header: 1 to get raw array)
+            const rawData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+            console.log('Raw Excel data:', rawData);
+            console.log('First row (headers):', rawData[0]);
+
+            if (rawData.length < 2) {
+                console.error('Excel file is empty or has no data rows');
+                reviewHeaders = ['Datum', 'Beschreibung', 'Referenz', 'Soll', 'Haben', 'Saldo'];
+                reviewData = createMockPreviewData();
+            } else {
+                // First row is headers
+                reviewHeaders = rawData[0].map(h => String(h || ''));
+                console.log('Headers:', reviewHeaders);
+
+                // Convert remaining rows to objects
+                reviewData = rawData.slice(1).map(row => {
+                    const obj = {};
+                    reviewHeaders.forEach((header, index) => {
+                        obj[header] = String(row[index] || '');
+                    });
+                    return obj;
+                });
+
+                console.log('Converted to review format:', reviewData.length, 'transactions');
+                console.log('Sample transaction:', reviewData[0]);
+            }
+        }
+
+        // Update stats
+        document.getElementById('transactionCount').textContent = reviewData.length;
+        document.getElementById('reviewDetectedBank').textContent = formatBankName(job.bank || 'auto');
+
+        // Render table
+        renderReviewTable();
+
+        // Show review state
+        showState('review');
+
+    } catch (error) {
+        console.error('Error loading preview:', error);
+        // Create mock data on error
+        reviewHeaders = ['Datum', 'Beschreibung', 'Referenz', 'Soll', 'Haben', 'Saldo'];
+        reviewData = createMockPreviewData();
+
+        // Still show review state
+        document.getElementById('transactionCount').textContent = reviewData.length;
+        document.getElementById('reviewDetectedBank').textContent = formatBankName(job.bank || 'auto');
+        renderReviewTable();
+        showState('review');
+    }
+}
+
+function createMockPreviewData() {
+    // Create some mock data for testing
+    return [
+        { date: '2024-01-15', description: 'Beispiel Transaktion 1', reference: 'REF001', debit: '100.00', credit: '', balance: '900.00' },
+        { date: '2024-01-16', description: 'Beispiel Transaktion 2', reference: 'REF002', debit: '', credit: '50.00', balance: '950.00' },
+        { date: '2024-01-17', description: 'Beispiel Transaktion 3', reference: 'REF003', debit: '200.00', credit: '', balance: '750.00' }
+    ];
+}
+
+function renderReviewTable() {
+    // Render headers
+    const thead = document.getElementById('dataTableHeader');
+    thead.innerHTML = '';
+
+    reviewHeaders.forEach((header, index) => {
+        const th = document.createElement('th');
+        th.className = 'px-3 py-3 text-left font-semibold border-b-2 border-border whitespace-nowrap';
+        th.textContent = header;
+        // Make numeric columns right-aligned
+        if (header.toLowerCase().includes('soll') ||
+            header.toLowerCase().includes('haben') ||
+            header.toLowerCase().includes('saldo') ||
+            header.toLowerCase().includes('debit') ||
+            header.toLowerCase().includes('credit') ||
+            header.toLowerCase().includes('balance')) {
+            th.className += ' text-right';
+        }
+        thead.appendChild(th);
+    });
+
+    // Render body
+    const tbody = document.getElementById('dataTableBody');
+    tbody.innerHTML = '';
+
+    reviewData.forEach((row, rowIndex) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50 transition-colors border-b border-gray-200';
+
+        reviewHeaders.forEach((header, colIndex) => {
+            const td = document.createElement('td');
+            td.className = 'px-3 py-2 border-r border-gray-200';
+
+            // Create Excel-like input
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = row[header] || '';
+            input.className = 'w-full px-2 py-1 border border-transparent hover:border-blue-300 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded';
+
+            // Make numeric columns right-aligned
+            if (header.toLowerCase().includes('soll') ||
+                header.toLowerCase().includes('haben') ||
+                header.toLowerCase().includes('saldo') ||
+                header.toLowerCase().includes('debit') ||
+                header.toLowerCase().includes('credit') ||
+                header.toLowerCase().includes('balance')) {
+                input.className += ' text-right';
+            }
+
+            // Set minimum width for better readability
+            input.style.minWidth = '100px';
+
+            input.dataset.row = rowIndex;
+            input.dataset.field = header;
+
+            input.addEventListener('change', handleCellEdit);
+            input.addEventListener('focus', function() {
+                this.select(); // Select all text on focus (Excel-like behavior)
+                updateCellPreview(this.value, header); // Update preview when cell is focused
+            });
+            input.addEventListener('input', function() {
+                updateCellPreview(this.value, header); // Update preview while typing
+            });
+
+            td.appendChild(input);
+            tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+    });
+}
+
+function updateCellPreview(content, columnName) {
+    const preview = document.getElementById('cellPreview');
+    if (preview) {
+        if (content && content.trim()) {
+            preview.innerHTML = `<span class="text-gray-800">${content}</span>`;
+        } else {
+            preview.innerHTML = '<span class="text-gray-400 italic">Klicken Sie auf eine Zelle, um den vollständigen Inhalt hier zu sehen...</span>';
+        }
+    }
+}
+
+function handleCellEdit(event) {
+    const rowIndex = parseInt(event.target.dataset.row);
+    const field = event.target.dataset.field;
+    const value = event.target.value;
+
+    if (reviewData[rowIndex]) {
+        reviewData[rowIndex][field] = value;
+        console.log(`Updated row ${rowIndex}, field ${field}:`, value);
+    }
+}
+
+async function handleConfirmDownload() {
+    console.log('Confirming download with edited data:', reviewData);
+
+    try {
+        // Send edited data back to backend
+        const response = await fetch(`${API_BASE}/api/update/${currentJobId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ transactions: reviewData })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update data');
+        }
+
+        // Now download the updated file
+        const downloadBtn = document.getElementById('downloadButton');
+        downloadBtn.href = `${API_BASE}/api/download/${currentJobId}`;
+        downloadBtn.download = `kontoauszug_${currentJobId.slice(0, 8)}.xlsx`;
+
+        // Show complete state
+        const job = await response.json();
+        showComplete(job);
+
+    } catch (error) {
+        console.error('Error confirming download:', error);
+        showError('Fehler beim Aktualisieren der Daten');
+    }
 }

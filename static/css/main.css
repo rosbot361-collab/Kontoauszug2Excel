@@ -1108,6 +1108,11 @@ h1, h2, h3, h4, h5, h6{
   background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
 }
 
+.bg-error{
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity, 1));
+}
+
 .bg-error-100{
   --tw-bg-opacity: 1;
   background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));

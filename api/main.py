@@ -10,7 +10,7 @@ import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from api.routes import upload, jobs, download
+from api.routes import upload, jobs, download, preview
 from api.services.database import init_db
 from api.services.cleanup import start_cleanup_scheduler
 
@@ -61,6 +61,7 @@ if static_dir.exists():
 # Routes
 app.include_router(upload.router, prefix="/api", tags=["Upload"])
 app.include_router(jobs.router, prefix="/api", tags=["Jobs"])
+app.include_router(preview.router, prefix="/api", tags=["Preview"])
 app.include_router(download.router, prefix="/api", tags=["Download"])
 
 

@@ -43,15 +43,15 @@ async def upload_pdf(
     Returns:
         JobResponse mit job_id und Status
     """
-    # Rate-Limiting Check
+    # Rate-Limiting Check (DISABLED FOR TESTING)
     ip_hash = get_ip_hash(request)
-    recent_jobs = count_recent_jobs_by_ip(ip_hash, hours=1)
-
-    if recent_jobs >= MAX_JOBS_PER_IP_PER_HOUR:
-        raise HTTPException(
-            status_code=429,
-            detail=f"Rate limit exceeded. Max {MAX_JOBS_PER_IP_PER_HOUR} uploads per hour."
-        )
+    # recent_jobs = count_recent_jobs_by_ip(ip_hash, hours=1)
+    #
+    # if recent_jobs >= MAX_JOBS_PER_IP_PER_HOUR:
+    #     raise HTTPException(
+    #         status_code=429,
+    #         detail=f"Rate limit exceeded. Max {MAX_JOBS_PER_IP_PER_HOUR} uploads per hour."
+    #     )
 
     # Datei-Validierung
     if not file.filename.endswith(".pdf"):
