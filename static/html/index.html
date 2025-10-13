@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KontoExport - PDF zu Excel Konverter</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="icon" href="/static/logos/favicon.png" type="image/png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body class="bg-background min-h-screen">
+    <!-- Header -->
+    <header class="bg-white border-b border-border shadow-card">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <img src="/static/logos/Logo.png" alt="KontoExport Logo" class="h-12 w-auto">
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center">
+                    <a href="/static/html/index.html" class="text-text-primary hover:text-primary transition-colors font-medium px-4">Home</a>
+                    <a href="/static/html/pricing.html" class="text-text-primary hover:text-primary transition-colors font-medium px-4">Preise</a>
+                    <a href="/static/html/kontakt.html" class="text-text-primary hover:text-primary transition-colors font-medium px-4">Kontakt</a>
+                    <a href="/static/html/login.html" class="text-text-primary hover:text-primary transition-colors font-medium px-4">Login</a>
+                    <a href="/static/html/login.html" class="ml-8 px-6 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-700 transition-all shadow-sm">
+                        Jetzt testen
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <section class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-primary mb-4">Kontoauszüge einfach konvertieren</h2>
+            <p class="text-lg text-text-secondary max-w-2xl mx-auto">
+                Laden Sie Ihre PDF-Kontoauszüge hoch und erhalten Sie sie als Excel-Dateien zurück.
+                Schnell, sicher und DSGVO-konform.
+            </p>
+        </section>
+
+        <!-- State Container -->
+        <div class="max-w-4xl mx-auto">
+            <!-- State 1: Upload -->
+            <div id="uploadState" class="bg-white rounded-xl shadow-card border border-border p-8">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold text-text-primary mb-2">Datei hochladen</h3>
+                    <p class="text-text-secondary">Wählen Sie eine PDF-Datei zum Konvertieren aus</p>
+                </div>
+
+                <!-- Upload Zone -->
+                <div id="uploadZone" class="drag-zone mb-6 cursor-pointer">
+                    <div class="flex flex-col items-center justify-center space-y-4">
+                        <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-lg font-semibold text-text-primary mb-2">
+                                PDF-Datei hier ablegen oder klicken zum Auswählen
+                            </h3>
+                            <p class="text-text-secondary">
+                                Unterstützte Formate: PDF • Maximale Größe: 10 MB
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden File Input -->
+                <input type="file" id="fileInput" accept=".pdf" class="hidden" />
+
+                <!-- File Info Display -->
+                <div id="fileInfo" class="hidden mb-6">
+                    <div class="bg-surface-100 rounded-lg p-4 border border-border">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-accent-50 rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-text-primary" id="fileName">Dateiname.pdf</p>
+                                    <p class="text-sm text-text-secondary" id="fileSize">0 KB</p>
+                                </div>
+                            </div>
+                            <button id="removeFileBtn" class="text-error hover:text-error-500 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bank Selection -->
+                <div class="grid md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Bank auswählen</label>
+                        <select id="bankSelect" class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            <option value="auto">Automatisch erkennen</option>
+                            <option value="sparkasse">Sparkasse</option>
+                            <option value="ing">ING</option>
+                            <option value="deutsche_bank">Deutsche Bank</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Ausgabeformat</label>
+                        <select id="formatSelect" class="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                            <option value="xlsx">Excel (.xlsx)</option>
+                            <option value="csv">CSV (.csv)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Upload Button -->
+                <button id="uploadButton" disabled class="btn-primary w-full opacity-50 cursor-not-allowed">
+                    <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                    </svg>
+                    Konvertierung starten
+                </button>
+            </div>
+
+            <!-- State 2: Processing -->
+            <div id="processingState" class="hidden bg-white rounded-xl shadow-card border border-border p-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-primary animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-text-primary mb-2">Verarbeitung läuft</h3>
+                    <p class="text-text-secondary mb-8" id="processingStatus">PDF wird analysiert...</p>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-bar mb-4">
+                        <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+                    </div>
+
+                    <p class="text-sm text-text-tertiary">Dies kann einige Sekunden dauern</p>
+                </div>
+            </div>
+
+            <!-- State 3: Review/Preview -->
+            <div id="reviewState" class="hidden bg-white rounded-xl shadow-card border border-border p-8">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold text-text-primary mb-2">Daten überprüfen</h3>
+                    <p class="text-text-secondary">Überprüfen Sie die konvertierten Daten und nehmen Sie bei Bedarf Änderungen vor</p>
+                </div>
+
+                <!-- Info Banner -->
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div class="text-sm text-blue-800">
+                            <strong>Tipp:</strong> Klicken Sie auf eine Zelle, um ihren Inhalt zu bearbeiten. Ihre Änderungen werden vor dem Download übernommen.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction Stats -->
+                <div class="bg-surface-100 rounded-lg p-4 mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-text-secondary">Transaktionen gefunden</p>
+                            <p class="text-2xl font-bold text-text-primary" id="transactionCount">0</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-text-secondary">Bank erkannt</p>
+                            <p class="text-lg font-semibold text-text-primary" id="reviewDetectedBank">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cell Preview (shows full content of selected cell) -->
+                <div class="mb-4">
+                    <div id="cellPreview" class="w-full px-4 py-3 bg-white border-2 border-blue-200 rounded-lg text-sm" style="min-height: 44px; overflow-x: auto; overflow-wrap: break-word; word-break: break-all;">
+                        <span class="text-gray-400 italic">Klicken Sie auf eine Zelle, um den vollständigen Inhalt hier zu sehen...</span>
+                    </div>
+                </div>
+
+                <!-- Table Container with Scroll (max ~18 rows visible) -->
+                <div class="mb-6 border border-border rounded-lg shadow-sm" style="height: 600px; max-height: 600px; overflow-y: scroll; overflow-x: auto; display: block;">
+                    <table id="dataTable" class="w-full text-sm border-collapse">
+                        <thead class="bg-surface text-text-primary" style="position: sticky; top: 0; z-index: 10; background-color: #f8f9fa;">
+                            <tr id="dataTableHeader">
+                                <!-- Headers will be dynamically inserted here -->
+                            </tr>
+                        </thead>
+                        <tbody id="dataTableBody" class="bg-white">
+                            <!-- Data rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-4 justify-center items-center">
+                    <button id="confirmDownloadBtn" class="inline-flex items-center justify-center px-8 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-700 transition-all shadow-sm">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Bestätigen & Herunterladen
+                    </button>
+                    <button id="deleteReviewBtn" class="inline-flex items-center justify-center px-8 py-3 bg-error text-white rounded-lg font-medium hover:bg-red-700 transition-all shadow-sm">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                        Daten löschen
+                    </button>
+                </div>
+            </div>
+
+            <!-- State 4: Complete -->
+            <div id="completeState" class="hidden bg-white rounded-xl shadow-card border border-success-100 p-8">
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-success-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-success mb-2">Konvertierung erfolgreich!</h3>
+                    <p class="text-text-secondary mb-2" id="completeInfo">Ihre Datei wurde erfolgreich konvertiert</p>
+                    <p class="text-sm text-text-tertiary">Bank: <span id="detectedBank" class="font-medium">Automatisch erkannt</span></p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-4">
+                    <div class="flex justify-center">
+                        <a id="downloadButton" href="#" download class="btn-primary inline-flex items-center justify-center px-8 py-3">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                            Datei herunterladen
+                        </a>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <button id="deleteBtn" class="inline-flex items-center justify-center px-8 py-3 bg-error text-white rounded-lg font-medium hover:bg-red-700 transition-all shadow-sm">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                            Daten löschen
+                        </button>
+                    </div>
+
+                    <div class="pt-4 border-t border-border">
+                        <button id="newConversionBtn" class="w-full px-6 py-3 bg-surface-100 text-text-primary rounded-lg font-medium hover:bg-surface-200 transition-all">
+                            Neue Datei konvertieren
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State 4: Error -->
+            <div id="errorState" class="hidden bg-white rounded-xl shadow-card border border-error-100 p-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-error-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-error mb-2">Fehler bei der Verarbeitung</h3>
+                    <p class="text-text-secondary mb-8" id="errorMessage">Ein Fehler ist aufgetreten</p>
+
+                    <button id="retryBtn" class="btn-primary">
+                        Erneut versuchen
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <section class="mt-16 max-w-4xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="text-center p-6">
+                    <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <h4 class="font-semibold text-text-primary mb-2">DSGVO-konform</h4>
+                    <p class="text-sm text-text-secondary">Alle Dateien werden nach 15 Minuten automatisch gelöscht</p>
+                </div>
+
+                <div class="text-center p-6">
+                    <div class="w-12 h-12 bg-accent-50 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h4 class="font-semibold text-text-primary mb-2">Schnell</h4>
+                    <p class="text-sm text-text-secondary">Konvertierung in wenigen Sekunden</p>
+                </div>
+
+                <div class="text-center p-6">
+                    <div class="w-12 h-12 bg-secondary-50 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h4 class="font-semibold text-text-primary mb-2">Sicher</h4>
+                    <p class="text-sm text-text-secondary">Keine dauerhafte Speicherung Ihrer Daten</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-border mt-16">
+        <div class="container mx-auto px-4 py-6">
+            <p class="text-center text-sm text-text-secondary">
+                &copy; 2025 KontoExport • Sichere und DSGVO-konforme Kontoauszug-Konvertierung
+            </p>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

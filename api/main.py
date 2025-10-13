@@ -69,7 +69,7 @@ app.include_router(download.router, prefix="/api", tags=["Download"])
 async def root():
     """Redirect to Web UI"""
     from fastapi.responses import FileResponse
-    index_path = Path(__file__).parent.parent / "static" / "index.html"
+    index_path = Path(__file__).parent.parent / "static" / "html" / "index.html"
     if index_path.exists():
         return FileResponse(str(index_path))
     return {
