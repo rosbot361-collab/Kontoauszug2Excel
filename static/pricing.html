@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preise - KontoExport</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="icon" href="/static/favicon.png" type="image/png">
+</head>
+<body class="bg-background min-h-screen">
+    <!-- Header -->
+    <header class="bg-white border-b border-border shadow-card">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/static/index.html">
+                        <img src="/static/Logo.png" alt="KontoExport Logo" class="h-12 w-auto">
+                    </a>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center">
+                    <a href="/static/index.html" class="text-text-primary hover:text-primary transition-colors font-medium px-4">Home</a>
+                    <a href="/static/pricing.html" class="text-primary transition-colors font-medium px-4">Preise</a>
+                    <a href="#" class="text-text-primary hover:text-primary transition-colors font-medium px-4">Kontakt</a>
+                    <a href="#" class="text-text-primary hover:text-primary transition-colors font-medium px-4">Login</a>
+                    <a href="/static/index.html" class="ml-8 px-6 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-700 transition-all shadow-sm">
+                        Jetzt testen
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <!-- Hero Section -->
+        <section class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-primary mb-4">Transparente Preise für jede Unternehmensgröße</h1>
+            <p class="text-lg text-text-secondary max-w-2xl mx-auto mb-8">
+                Wählen Sie den passenden Plan für Ihre Bedürfnisse. Alle Pläne beinhalten DSGVO-konforme Verarbeitung und automatische Datenlöschung.
+            </p>
+
+            <!-- Billing Toggle -->
+            <div class="flex items-center justify-center gap-4 mb-12">
+                <span class="text-text-secondary font-medium" id="monthlyLabel">Monatlich</span>
+                <button id="billingToggle" class="relative inline-flex items-center h-6 rounded-full w-11 bg-surface-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" role="switch" aria-checked="false">
+                    <span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform translate-x-1" id="toggleButton"></span>
+                </button>
+                <span class="text-text-primary font-medium" id="yearlyLabel">
+                    Jährlich
+                    <span class="inline-block px-2 py-1 bg-accent-50 text-accent-600 text-xs font-semibold rounded-full ml-1">2 Monate gratis</span>
+                </span>
+            </div>
+        </section>
+
+        <!-- Free Tier -->
+        <section class="max-w-5xl mx-auto mb-8">
+            <div class="bg-white rounded-xl shadow-card border border-border p-8">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="flex-1 mb-6 md:mb-0">
+                        <h3 class="text-2xl font-bold text-text-primary mb-2">Kostenlos</h3>
+                        <p class="text-text-secondary mb-4">Perfekt zum Testen und für gelegentliche Nutzung</p>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-text-primary">5 Konvertierungen pro Monat</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-text-primary">Excel & CSV Export</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-text-primary">DSGVO-konforme Verarbeitung</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="text-center md:text-right">
+                        <div class="mb-4">
+                            <span class="text-5xl font-bold text-primary">€0</span>
+                        </div>
+                        <a href="/static/index.html" class="btn-primary inline-block">Jetzt starten</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Cards -->
+        <section class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Starter Plan -->
+                <div class="bg-white rounded-xl shadow-card border border-border p-8 hover:shadow-modal transition-all duration-300">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-text-primary mb-2">Starter</h3>
+                        <p class="text-text-secondary mb-6">Für Freelancer und Einzelunternehmer</p>
+                        <div class="mb-6">
+                            <span class="text-5xl font-bold text-primary">
+                                <span class="monthly-price">€9,90</span>
+                                <span class="yearly-price hidden">€99</span>
+                            </span>
+                            <span class="text-text-secondary">
+                                <span class="monthly-price">/Monat</span>
+                                <span class="yearly-price hidden">/Jahr</span>
+                            </span>
+                        </div>
+                        <a href="#" class="btn-primary w-full inline-block mb-6">Plan wählen</a>
+                    </div>
+
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">50 Konvertierungen/Monat</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">Alle Export-Formate (Excel, CSV, OFX)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">DATEV-kompatible Exporte</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">E-Mail Support</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">Automatische Datenlöschung</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Professional Plan (Recommended) -->
+                <div class="bg-white rounded-xl shadow-modal border-2 border-primary p-8 relative transform md:scale-105 hover:scale-110 transition-all duration-300">
+                    <div class="absolute top-0 right-0 bg-primary text-white px-4 py-1 rounded-bl-lg rounded-tr-lg text-sm font-semibold">
+                        EMPFOHLEN
+                    </div>
+
+                    <div class="text-center mb-6 mt-4">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Professional</h3>
+                        <p class="text-text-secondary mb-6">Für kleine Unternehmen und Buchhalter</p>
+                        <div class="mb-6">
+                            <span class="text-5xl font-bold text-primary">
+                                <span class="monthly-price">€24,90</span>
+                                <span class="yearly-price hidden">€249</span>
+                            </span>
+                            <span class="text-text-secondary">
+                                <span class="monthly-price">/Monat</span>
+                                <span class="yearly-price hidden">/Jahr</span>
+                            </span>
+                        </div>
+                        <a href="#" class="btn-primary w-full inline-block mb-6">Plan wählen</a>
+                    </div>
+
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary font-semibold">200 Konvertierungen/Monat</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">Alles aus Starter, plus:</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">Bulk-Verarbeitung</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">API-Zugang</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">Priority Support (24h Response)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">Lexoffice & sevDesk Integration</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Business Plan -->
+                <div class="bg-white rounded-xl shadow-card border border-border p-8 hover:shadow-modal transition-all duration-300">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-text-primary mb-2">Business</h3>
+                        <p class="text-text-secondary mb-6">Für Steuerberaterkanzleien und KMUs</p>
+                        <div class="mb-6">
+                            <span class="text-5xl font-bold text-primary">
+                                <span class="monthly-price">€49,90</span>
+                                <span class="yearly-price hidden">€499</span>
+                            </span>
+                            <span class="text-text-secondary">
+                                <span class="monthly-price">/Monat</span>
+                                <span class="yearly-price hidden">/Jahr</span>
+                            </span>
+                        </div>
+                        <a href="#" class="btn-primary w-full inline-block mb-6">Plan wählen</a>
+                    </div>
+
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary font-semibold">1.000 Konvertierungen/Monat</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">Alles aus Professional, plus:</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">White-Label-Optionen</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">Multi-Client-Management</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">Telefon-Support</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">Persönlicher Account Manager</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <span class="text-text-primary">DATEV-Integration</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Badges -->
+        <section class="mt-16 max-w-4xl mx-auto">
+            <div class="bg-white rounded-xl shadow-card border border-border p-8">
+                <h3 class="text-2xl font-bold text-center text-text-primary mb-8">Warum KontoExport?</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold text-text-primary mb-2">DSGVO-konform</h4>
+                        <p class="text-sm text-text-secondary">100% DSGVO-konforme Verarbeitung mit automatischer Datenlöschung nach 15 Minuten</p>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-accent-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold text-text-primary mb-2">Made in Germany</h4>
+                        <p class="text-sm text-text-secondary">Deutsche Server, deutsches Team, deutscher Datenschutz</p>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-secondary-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold text-text-primary mb-2">Schnell & Zuverlässig</h4>
+                        <p class="text-sm text-text-secondary">Konvertierung in Sekunden mit 99,9% Verfügbarkeit</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="mt-16 max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-center text-text-primary mb-8">Häufig gestellte Fragen</h2>
+            <div class="space-y-4">
+                <div class="bg-white rounded-lg shadow-card border border-border p-6">
+                    <h3 class="font-semibold text-text-primary mb-2">Kann ich jederzeit kündigen?</h3>
+                    <p class="text-text-secondary">Ja, alle Abonnements können monatlich gekündigt werden. Bei Jahresplänen erhalten Sie eine anteilige Rückerstattung.</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-card border border-border p-6">
+                    <h3 class="font-semibold text-text-primary mb-2">Welche Banken werden unterstützt?</h3>
+                    <p class="text-text-secondary">Wir unterstützen alle gängigen deutschen Banken inkl. Sparkasse, ING, Deutsche Bank, Volksbank, N26, und viele mehr.</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-card border border-border p-6">
+                    <h3 class="font-semibold text-text-primary mb-2">Ist meine Daten sicher?</h3>
+                    <p class="text-text-secondary">Absolut. Alle Daten werden verschlüsselt übertragen und nach der Konvertierung automatisch gelöscht. Wir speichern keine Finanzdaten dauerhaft.</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-card border border-border p-6">
+                    <h3 class="font-semibold text-text-primary mb-2">Gibt es Rabatte für Steuerberater?</h3>
+                    <p class="text-text-secondary">Ja! Steuerberaterkanzleien erhalten 30-40% Rabatt auf Business-Pläne. Kontaktieren Sie uns für ein individuelles Angebot.</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-card border border-border p-6">
+                    <h3 class="font-semibold text-text-primary mb-2">Was passiert, wenn ich mein Limit überschreite?</h3>
+                    <p class="text-text-secondary">Sie werden benachrichtigt und können entweder auf einen höheren Plan upgraden oder bis zum nächsten Monat warten. Es fallen keine zusätzlichen Gebühren an.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="mt-16 bg-primary rounded-xl shadow-modal p-12 text-center">
+            <h2 class="text-3xl font-bold text-white mb-4">Bereit, Zeit zu sparen?</h2>
+            <p class="text-lg text-white mb-8 opacity-90">
+                Starten Sie noch heute kostenlos und konvertieren Sie Ihre ersten Kontoauszüge in Sekunden.
+            </p>
+            <a href="/static/index.html" class="inline-block px-8 py-3 bg-white text-primary rounded-lg font-semibold hover:scale-105 transition-all shadow-sm text-lg">
+                Kostenlos testen
+            </a>
+            <p class="text-sm text-white mt-4 opacity-75">Keine Kreditkarte erforderlich • 5 Konvertierungen inklusive</p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-border mt-16">
+        <div class="container mx-auto px-4 py-6">
+            <p class="text-center text-sm text-text-secondary">
+                &copy; 2025 KontoExport • Sichere und DSGVO-konforme Kontoauszug-Konvertierung
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Billing Toggle Functionality
+        const toggle = document.getElementById('billingToggle');
+        const toggleButton = document.getElementById('toggleButton');
+        const monthlyPrices = document.querySelectorAll('.monthly-price');
+        const yearlyPrices = document.querySelectorAll('.yearly-price');
+        const monthlyLabel = document.getElementById('monthlyLabel');
+        const yearlyLabel = document.getElementById('yearlyLabel');
+
+        let isYearly = false;
+
+        toggle.addEventListener('click', () => {
+            isYearly = !isYearly;
+
+            if (isYearly) {
+                toggleButton.classList.remove('translate-x-1');
+                toggleButton.classList.add('translate-x-6');
+                toggle.classList.remove('bg-surface-200');
+                toggle.classList.add('bg-primary');
+                toggle.setAttribute('aria-checked', 'true');
+
+                monthlyPrices.forEach(el => el.classList.add('hidden'));
+                yearlyPrices.forEach(el => el.classList.remove('hidden'));
+
+                monthlyLabel.classList.remove('text-text-primary', 'font-medium');
+                monthlyLabel.classList.add('text-text-secondary');
+                yearlyLabel.classList.remove('text-text-secondary');
+                yearlyLabel.classList.add('text-text-primary', 'font-bold');
+            } else {
+                toggleButton.classList.remove('translate-x-6');
+                toggleButton.classList.add('translate-x-1');
+                toggle.classList.remove('bg-primary');
+                toggle.classList.add('bg-surface-200');
+                toggle.setAttribute('aria-checked', 'false');
+
+                monthlyPrices.forEach(el => el.classList.remove('hidden'));
+                yearlyPrices.forEach(el => el.classList.add('hidden'));
+
+                monthlyLabel.classList.remove('text-text-secondary');
+                monthlyLabel.classList.add('text-text-primary', 'font-medium');
+                yearlyLabel.classList.remove('text-text-primary', 'font-bold');
+                yearlyLabel.classList.add('text-text-secondary');
+            }
+        });
+    </script>
+</body>
+</html>
