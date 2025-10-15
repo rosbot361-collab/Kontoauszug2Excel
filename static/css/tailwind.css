@@ -221,3 +221,12 @@
 .animate-pulse-slow {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+<style>
+.btn-success, .btn-primary, .btn-danger {
+  @apply w-full flex justify-center items-center gap-2 px-8 py-3 rounded-lg font-medium text-white transition-all shadow-sm;
+}
+.btn-success { @apply bg-green-500 hover:bg-green-600; }
+.btn-primary { @apply bg-blue-600 hover:bg-blue-700; }
+.btn-danger { @apply bg-red-600 hover:bg-red-700; }
+</style>

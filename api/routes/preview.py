@@ -36,7 +36,12 @@ class PreviewResponse(BaseModel):
 
 class UpdateRequest(BaseModel):
     """Request model for updating transactions"""
-    transactions: List[Transaction]
+    headers: List[str]
+    transactions: List[Dict[str, Any]]
+
+    class Config:
+        # Allow arbitrary types to handle any field names
+        extra = 'allow'
 
 
 @router.get("/preview/{job_id}", response_model=PreviewResponse)
@@ -116,7 +121,7 @@ async def update_preview(job_id: str, request: UpdateRequest):
 
     Args:
         job_id: UUID des Jobs
-        request: UpdateRequest mit bearbeiteten Transaktionen
+        request: UpdateRequest mit bearbeiteten Transaktionen und Headers
 
     Returns:
         Job-Informationen
@@ -132,30 +137,64 @@ async def update_preview(job_id: str, request: UpdateRequest):
             detail=f"Job ist noch nicht abgeschlossen (Status: {job['status']})"
         )
 
-    result_path = Path(job['result_path'])
+    # Find the output file
+    from api.config import UPLOAD_DIR
+    job_dir = UPLOAD_DIR / job_id
+    output_file = job_dir / f"output.{job['output_format']}"
+
+    if not output_file.exists():
+        # Try alternative path
+        if job.get('result_path'):
+            output_file = Path(job['result_path'])
+
+        if not output_file.exists():
+            raise HTTPException(status_code=404, detail="Output-Datei nicht gefunden")
 
     try:
-        # Konvertiere Transaktionen zu DataFrame
-        data = []
-        for trans in request.transactions:
-            data.append({
-                'Datum': trans.date,
-                'Beschreibung': trans.description,
-                'Referenz': trans.reference,
-                'Soll': trans.debit,
-                'Haben': trans.credit,
-                'Saldo': trans.balance
-            })
+        logger.info(f"Updating job {job_id} with {len(request.transactions)} transactions")
+        logger.info(f"Headers: {request.headers}")
+        logger.info(f"Output file path: {output_file}")
+        logger.info(f"Sample transaction: {request.transactions[0] if request.transactions else 'No transactions'}")
 
-        df = pd.DataFrame(data)
+        # Konvertiere Transaktionen zu DataFrame mit dynamischen Headers
+        data = []
+        for i, trans in enumerate(request.transactions):
+            row = {}
+            for header in request.headers:
+                # Get value from transaction dict, default to empty string
+                value = trans.get(header, '')
+                row[header] = str(value) if value is not None else ''
+            data.append(row)
+
+            # Log first row for debugging
+            if i == 0:
+                logger.info(f"First row data: {row}")
+
+        if not data:
+            raise ValueError("Keine Transaktionsdaten zum Speichern vorhanden")
+
+        df = pd.DataFrame(data, columns=request.headers)
+
+        logger.info(f"Created DataFrame with shape: {df.shape}")
+        logger.info(f"DataFrame columns: {df.columns.tolist()}")
+        logger.info(f"DataFrame head:\n{df.head()}")
 
         # Speichere aktualisierte Datei
         if job['output_format'] == 'xlsx':
-            df.to_excel(result_path, index=False, engine='openpyxl')
+            df.to_excel(output_file, index=False, engine='openpyxl')
+            logger.info(f"Saved updated Excel file to: {output_file}")
         else:
-            df.to_csv(result_path, index=False)
+            df.to_csv(output_file, index=False)
+            logger.info(f"Saved updated CSV file to: {output_file}")
 
-        logger.info(f"Updated {len(request.transactions)} transactions for job {job_id}")
+        # Verify file was written
+        if not output_file.exists():
+            raise IOError(f"Datei wurde nicht geschrieben: {output_file}")
+
+        file_size = output_file.stat().st_size
+        logger.info(f"File written successfully, size: {file_size} bytes")
+
+        logger.info(f"Successfully updated {len(request.transactions)} transactions for job {job_id}")
 
         return {
             "job_id": job_id,
@@ -165,6 +204,12 @@ async def update_preview(job_id: str, request: UpdateRequest):
             "output_format": job['output_format']
         }
 
+    except ValueError as e:
+        logger.error(f"Validation error updating job {job_id}: {e}", exc_info=True)
+        raise HTTPException(status_code=400, detail=str(e))
+    except IOError as e:
+        logger.error(f"IO error updating job {job_id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Fehler beim Schreiben der Datei: {str(e)}")
     except Exception as e:
-        logger.error(f"Error updating job {job_id}: {e}")
-        raise HTTPException(status_code=500, detail="Fehler beim Aktualisieren der Daten")
+        logger.error(f"Error updating job {job_id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Fehler beim Aktualisieren der Daten: {str(e)}")

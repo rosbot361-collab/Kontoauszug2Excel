@@ -204,14 +204,31 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex gap-4 justify-center items-center">
-                    <button id="confirmDownloadBtn" class="inline-flex items-center justify-center px-8 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-700 transition-all shadow-sm">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
-                        Bestätigen & Herunterladen
+                <div class="flex flex-col gap-4 max-w-2xl mx-auto">
+                    <!-- Primary Action: Download without Updates (GREEN) -->
+                    <button id="directDownloadBtn"
+                        class="w-full flex justify-center items-center gap-2 px-8 py-3 bg-success text-white rounded-lg font-medium transition-all shadow-sm"
+                        style="background-color: #10B981;">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            <span>Ohne Änderungen herunterladen</span>
+                        </div>
                     </button>
-                    <button id="deleteReviewBtn" class="inline-flex items-center justify-center px-8 py-3 bg-error text-white rounded-lg font-medium hover:bg-red-700 transition-all shadow-sm">
+
+
+                    <!-- Secondary Action: Download with Updates (BLUE) -->
+                    <button id="confirmDownloadBtn" class="w-full inline-flex items-center justify-center px-8 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-700 transition-all shadow-sm">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        Mit Änderungen herunterladen
+                    </button>
+
+                    <!-- Danger Action: Delete -->
+                    <button id="deleteReviewBtn" class="w-full inline-flex items-center justify-center px-8 py-3 bg-error text-white rounded-lg font-medium hover:bg-red-700 transition-all shadow-sm">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                         </svg>
@@ -237,25 +254,7 @@
                 <!-- Action Buttons -->
                 <div class="space-y-4">
                     <div class="flex justify-center">
-                        <a id="downloadButton" href="#" download class="btn-primary inline-flex items-center justify-center px-8 py-3">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                            </svg>
-                            Datei herunterladen
-                        </a>
-                    </div>
-
-                    <div class="flex justify-center">
-                        <button id="deleteBtn" class="inline-flex items-center justify-center px-8 py-3 bg-error text-white rounded-lg font-medium hover:bg-red-700 transition-all shadow-sm">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                            </svg>
-                            Daten löschen
-                        </button>
-                    </div>
-
-                    <div class="pt-4 border-t border-border">
-                        <button id="newConversionBtn" class="w-full px-6 py-3 bg-surface-100 text-text-primary rounded-lg font-medium hover:bg-surface-200 transition-all">
+                        <button id="newConversionBtn" class="px-8 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-700 transition-all shadow-sm">
                             Neue Datei konvertieren
                         </button>
                     </div>
@@ -317,15 +316,57 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-white border-t border-border mt-16">
-        <div class="container mx-auto px-4 py-6">
-            <p class="text-center text-sm text-text-secondary">
-                &copy; 2025 KontoExport • Sichere und DSGVO-konforme Kontoauszug-Konvertierung
+        <div class="container mx-auto px-4 py-12">
+
+            <!-- Logo + Beschreibung -->
+            <div class="text-center mb-12">
+            <img src="/static/logos/Logo.png" alt="KontoExport Logo" class="h-12 w-auto mt-4 mx-auto">
+            <p class="text-sm text-text-secondary max-w-md mx-auto mt-4">
+                Sichere und DSGVO-konforme Konvertierung von Kontoauszügen für Unternehmen jeder Größe.
             </p>
+            </div>
+
+            <!-- 3 Spalten nebeneinander -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-5xl mx-auto text-center !grid">
+
+            <!-- Unternehmen -->
+            <div>
+                <h4 class="font-semibold text-text-primary mb-4">Unternehmen</h4>
+                <ul class="space-y-2">
+                <li><a href="#" class="text-sm text-text-secondary hover:text-primary transition-colors">Über uns</a></li>
+                <li><a href="/static/html/kontakt.html" class="text-sm text-text-secondary hover:text-primary transition-colors">Kontakt</a></li>
+                <li><a href="#" class="text-sm text-text-secondary hover:text-primary transition-colors">Blog</a></li>
+                </ul>
+            </div>
+
+            <!-- Produkt -->
+            <div>
+                <h4 class="font-semibold text-text-primary mb-4">Produkt</h4>
+                <ul class="space-y-2">
+                <li><a href="/static/html/index.html" class="text-sm text-text-secondary hover:text-primary transition-colors">Startseite</a></li>
+                <li><a href="/static/html/pricing.html" class="text-sm text-text-secondary hover:text-primary transition-colors">Preise</a></li>
+                <li><a href="#" class="text-sm text-text-secondary hover:text-primary transition-colors">Features</a></li>
+                </ul>
+            </div>
+
+            <!-- Rechtliches -->
+            <div>
+                <h4 class="font-semibold text-text-primary mb-4">Rechtliches & Support</h4>
+                <ul class="space-y-2">
+                <li><a href="#" class="text-sm text-text-secondary hover:text-primary transition-colors">Datenschutz</a></li>
+                <li><a href="#" class="text-sm text-text-secondary hover:text-primary transition-colors">AGB</a></li>
+                <li><a href="#" class="text-sm text-text-secondary hover:text-primary transition-colors">Impressum</a></li>
+                </ul>
+            </div>
+
+            </div>
+
+            <!-- Bottom border with spacing -->
+            <div class="border-t border-border pt-8 mt-8"></div>
         </div>
     </footer>
 
-    <script src="/static/js/app.js"></script>
+    <script src="/static/js/app.js?v=2"></script>
 </body>
 </html>

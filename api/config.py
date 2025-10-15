@@ -21,7 +21,7 @@ ALLOWED_EXTENSIONS = {".pdf"}
 
 # Job-Einstellungen
 JOB_RETENTION_MINUTES = 15  # Nach 15 Minuten automatisch löschen
-MAX_JOBS_PER_IP_PER_HOUR = 5  # Rate-Limiting
+MAX_JOBS_PER_IP_PER_HOUR = 999999  # Rate-Limiting (DISABLED FOR TESTING)
 
 # Datenbank
 DATABASE_PATH = os.getenv("DATABASE_PATH", str(DATA_DIR / "jobs.db"))

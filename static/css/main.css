@@ -1523,7 +1523,7 @@ h1, h2, h3, h4, h5, h6{
   .md\:flex{
     display: flex;
   }
-
+}
   .md\:hidden{
     display: none;
   }
@@ -1535,4 +1535,40 @@ h1, h2, h3, h4, h5, h6{
   .md\:grid-cols-3{
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+.remember-me {
+  margin-left: 0.75rem; /* ~12px */
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* 2. Adjust the eye icon alignment in password field */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+  padding-right: 2.5rem; /* ensure space for the eye icon */
+}
+
+/* Adjust the eye icon to sit lower next to the password field */
+.password-wrapper .toggle-password {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%; /* center it vertically */
+  transform: translateY(-35%); /* slight downward shift */
+  cursor: pointer;
+  color: #6b7280;
+  transition: color 0.2s;
+}
+
+.password-wrapper .toggle-password:hover {
+  color: #111827; /* darker on hover */
+}
+
+body {
+  background: linear-gradient(100deg, #EFF6FF 0%, #DBEAFE 50%, #BFDBFE 100%);
+  min-height: 100vh;
 }

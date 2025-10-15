@@ -75,10 +75,10 @@
 .grid > div:nth-child(8) { animation-delay: 0.8s; }
 .grid > div:nth-child(9) { animation-delay: 0.9s; }
 
-/* Feature icon glow effect */
-.group:hover .w-16 {
+/* Feature icon glow effect - disabled */
+/* .group:hover .w-16 {
     box-shadow: 0 0 30px rgba(30, 58, 138, 0.4);
-}
+} */
 
 /* Smooth transitions for all elements */
 * {
@@ -86,15 +86,15 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Professional card border glow */
-.border-2.border-primary {
+/* Professional card border glow - disabled */
+/* .border-2.border-primary {
     box-shadow: 0 0 0 1px rgba(30, 58, 138, 0.1);
     transition: all 0.5s ease-out;
 }
 
 .border-2.border-primary:hover {
     box-shadow: 0 0 0 1px rgba(30, 58, 138, 0.3), 0 0 30px rgba(30, 58, 138, 0.2);
-}
+} */
 
 /* Price number animation */
 .monthly-price, .yearly-price {
@@ -114,15 +114,12 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: 0 4px 20px rgba(30, 58, 138, 0.3);
-    filter: drop-shadow(0 2px 8px rgba(30, 58, 138, 0.25));
     letter-spacing: -0.03em;
     transition: all 0.3s ease;
 }
 
 .price-display:hover {
     transform: scale(1.05);
-    filter: drop-shadow(0 4px 16px rgba(30, 58, 138, 0.4));
 }
 
 /* Enhanced Plan Button Effect */
