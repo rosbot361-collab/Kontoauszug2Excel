@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KontoExport - PDF zu Excel Konverter</title>
     <link rel="stylesheet" href="/static/css/main.css">
-    <link rel="stylesheet" href="/static/css/enhancements.css">
     <link rel="icon" href="/static/logos/favicon.png" type="image/png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -128,6 +127,39 @@
                 </button>
             </div>
 
+            <!-- Features Icons - Separate Section -->
+            <div id="featureIcons" class="grid md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto feature-icons">
+                <div class="text-center p-4">
+                    <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <h4 class="font-semibold text-text-primary text-sm mb-1">DSGVO-konform</h4>
+                    <p class="text-xs text-text-secondary">Automatische Löschung nach 15 Min.</p>
+                </div>
+
+                <div class="text-center p-4">
+                    <div class="w-12 h-12 bg-accent-50 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h4 class="font-semibold text-text-primary text-sm mb-1">Schnell</h4>
+                    <p class="text-xs text-text-secondary">Konvertierung in Sekunden</p>
+                </div>
+
+                <div class="text-center p-4">
+                    <div class="w-12 h-12 bg-secondary-50 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h4 class="font-semibold text-text-primary text-sm mb-1">Sicher</h4>
+                    <p class="text-xs text-text-secondary">Keine dauerhafte Speicherung</p>
+                </div>
+            </div>
+
             <!-- State 2: Processing -->
             <div id="processingState" class="hidden bg-white rounded-xl shadow-card border border-border p-8">
                 <div class="text-center">
@@ -183,14 +215,14 @@
                 </div>
 
                 <!-- Cell Preview (shows full content of selected cell) -->
-                <div class="mb-4">
+                <div class="bg-surface-100 rounded-lg p-4 mb-6">
                     <div id="cellPreview" class="w-full px-4 py-3 bg-white border-2 border-blue-200 rounded-lg text-sm" style="min-height: 44px; overflow-x: auto; overflow-wrap: break-word; word-break: break-all;">
                         <span class="text-gray-400 italic">Klicken Sie auf eine Zelle, um den vollständigen Inhalt hier zu sehen...</span>
                     </div>
                 </div>
 
                 <!-- Table Container with Scroll (max ~18 rows visible) -->
-                <div class="mb-6 border border-border rounded-lg shadow-sm" style="height: 600px; max-height: 600px; overflow-y: scroll; overflow-x: auto; display: block;">
+                <div class="mb-6 border border-border rounded-lg shadow-sm" style="max-height: 600px; overflow-y: auto; overflow-x: auto; display: block;">
                     <table id="dataTable" class="w-full text-sm border-collapse">
                         <thead class="bg-surface text-text-primary" style="position: sticky; top: 0; z-index: 10; background-color: #f8f9fa;">
                             <tr id="dataTableHeader">
@@ -204,38 +236,37 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex flex-col gap-4 max-w-2xl mx-auto">
-                    <!-- Primary Action: Download without Updates (GREEN) -->
-                    <button id="directDownloadBtn"
-                        class="w-full flex justify-center items-center gap-2 px-8 py-3 bg-success text-white rounded-lg font-medium transition-all shadow-sm"
-                        style="background-color: #10B981;">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                <div class="flex justify-between items-center mt-8 review-buttons">
+                    <!-- Download ohne Änderungen -->
+                    <div class="flex flex-col items-center">
+                        <button id="directDownloadBtn" class="action-icon-btn" title="Ohne Änderungen herunterladen">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                             </svg>
-                            <span>Ohne Änderungen herunterladen</span>
-                        </div>
-                    </button>
+                        </button>
+                        <p class="text-xs font-medium mt-2" style="color: #10B981;">Ohne Änderungen<br>herunterladen</p>
+                    </div>
 
+                    <!-- Download mit Änderungen -->
+                    <div class="flex flex-col items-center">
+                        <button id="confirmDownloadBtn" class="action-icon-btn" title="Mit Änderungen herunterladen">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                        </button>
+                        <p class="text-xs font-medium mt-2" style="color: #2563EB;">Mit Änderungen<br>herunterladen</p>
+                    </div>
 
-                    <!-- Secondary Action: Download with Updates (BLUE) -->
-                    <button id="confirmDownloadBtn" class="w-full inline-flex items-center justify-center px-8 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-700 transition-all shadow-sm">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                        </svg>
-                        Mit Änderungen herunterladen
-                    </button>
-
-                    <!-- Danger Action: Delete -->
-                    <button id="deleteReviewBtn" class="w-full inline-flex items-center justify-center px-8 py-3 bg-error text-white rounded-lg font-medium hover:bg-red-700 transition-all shadow-sm">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                        </svg>
-                        Daten löschen
-                    </button>
+                    <!-- Datei löschen -->
+                    <div class="flex flex-col items-center">
+                        <button id="deleteReviewBtn" class="action-icon-btn" title="Daten löschen">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                        <p class="text-xs font-medium mt-2" style="color: #DC2626;">Datei löschen</p>
+                    </div>
                 </div>
-            </div>
 
             <!-- State 4: Complete -->
             <div id="completeState" class="hidden bg-white rounded-xl shadow-card border border-success-100 p-8">
@@ -280,40 +311,6 @@
             </div>
         </div>
 
-        <!-- Features Section -->
-        <section class="mt-16 max-w-4xl mx-auto">
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="text-center p-6">
-                    <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                    </div>
-                    <h4 class="font-semibold text-text-primary mb-2">DSGVO-konform</h4>
-                    <p class="text-sm text-text-secondary">Alle Dateien werden nach 15 Minuten automatisch gelöscht</p>
-                </div>
-
-                <div class="text-center p-6">
-                    <div class="w-12 h-12 bg-accent-50 rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
-                    </div>
-                    <h4 class="font-semibold text-text-primary mb-2">Schnell</h4>
-                    <p class="text-sm text-text-secondary">Konvertierung in wenigen Sekunden</p>
-                </div>
-
-                <div class="text-center p-6">
-                    <div class="w-12 h-12 bg-secondary-50 rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                        </svg>
-                    </div>
-                    <h4 class="font-semibold text-text-primary mb-2">Sicher</h4>
-                    <p class="text-sm text-text-secondary">Keine dauerhafte Speicherung Ihrer Daten</p>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer class="bg-white border-t border-border mt-16">
@@ -367,6 +364,6 @@
         </div>
     </footer>
 
-    <script src="/static/js/app.js?v=2"></script>
+    <script src="/static/js/app.js?v=3"></script>
 </body>
 </html>

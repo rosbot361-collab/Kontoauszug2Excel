@@ -74,11 +74,6 @@ function setupEventListeners() {
     }
 
     // Complete State Buttons
-    const deleteBtn = document.getElementById('deleteBtn');
-    if (deleteBtn) {
-        deleteBtn.addEventListener('click', deleteAndReset);
-    }
-
     const newConversionBtn = document.getElementById('newConversionBtn');
     if (newConversionBtn) {
         newConversionBtn.addEventListener('click', resetToUpload);
@@ -94,6 +89,11 @@ function setupEventListeners() {
     const confirmDownloadBtn = document.getElementById('confirmDownloadBtn');
     if (confirmDownloadBtn) {
         confirmDownloadBtn.addEventListener('click', handleConfirmDownload);
+    }
+
+    const directDownloadBtn = document.getElementById('directDownloadBtn');
+    if (directDownloadBtn) {
+        directDownloadBtn.addEventListener('click', handleDirectDownload);
     }
 
     const deleteReviewBtn = document.getElementById('deleteReviewBtn');
@@ -183,6 +183,12 @@ function displayFileInfo(file) {
 
     fileInfo.classList.remove('hidden');
     uploadZone.style.display = 'none';
+
+    // Hide feature icons when file is uploaded
+    const featureIcons = document.getElementById('featureIcons');
+    if (featureIcons) {
+        featureIcons.style.display = 'none';
+    }
 }
 
 function formatFileSize(bytes) {
@@ -211,6 +217,12 @@ function removeFile(event) {
     uploadButton.disabled = true;
     uploadButton.classList.add('opacity-50', 'cursor-not-allowed');
     uploadButton.classList.remove('hover:scale-105');
+
+    // Show feature icons again when file is removed
+    const featureIcons = document.getElementById('featureIcons');
+    if (featureIcons) {
+        featureIcons.style.display = 'grid';
+    }
 }
 
 // Upload & Processing
@@ -368,10 +380,6 @@ function showComplete(job) {
     document.getElementById('completeInfo').textContent =
         `Ihre Datei wurde erfolgreich konvertiert (${job.output_format || 'xlsx'})`;
 
-    const downloadBtn = document.getElementById('downloadButton');
-    downloadBtn.href = `${API_BASE}/api/download/${currentJobId}`;
-    downloadBtn.download = `kontoauszug_${currentJobId.slice(0, 8)}.${job.output_format || 'xlsx'}`;
-
     showState('complete');
 }
 
@@ -432,6 +440,12 @@ function resetToUpload() {
 
     // Reset progress
     document.getElementById('progressFill').style.width = '0%';
+
+    // Show feature icons again when resetting
+    const featureIcons = document.getElementById('featureIcons');
+    if (featureIcons) {
+        featureIcons.style.display = 'grid';
+    }
 
     // Show upload state
     showState('upload');
@@ -621,30 +635,80 @@ async function handleConfirmDownload() {
     console.log('Confirming download with edited data:', reviewData);
 
     try {
-        // Send edited data back to backend
+        // Send edited data back to backend with headers
         const response = await fetch(`${API_BASE}/api/update/${currentJobId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ transactions: reviewData })
+            body: JSON.stringify({
+                headers: reviewHeaders,
+                transactions: reviewData
+            })
         });
 
         if (!response.ok) {
-            throw new Error('Failed to update data');
+            const errorData = await response.json();
+            console.error('Update failed:', errorData);
+            throw new Error(errorData.detail || 'Failed to update data');
         }
 
-        // Now download the updated file
-        const downloadBtn = document.getElementById('downloadButton');
-        downloadBtn.href = `${API_BASE}/api/download/${currentJobId}`;
-        downloadBtn.download = `kontoauszug_${currentJobId.slice(0, 8)}.xlsx`;
+        // Get the job info
+        const job = await response.json();
+        console.log('Data updated successfully:', job);
+
+        // Trigger download of updated file
+        const downloadUrl = `${API_BASE}/api/download/${currentJobId}`;
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `kontoauszug_${currentJobId.slice(0, 8)}.${job.output_format || 'xlsx'}`;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        console.log('Updated file download started');
 
         // Show complete state
-        const job = await response.json();
         showComplete(job);
 
     } catch (error) {
         console.error('Error confirming download:', error);
-        showError('Fehler beim Aktualisieren der Daten');
+        showError(error.message || 'Fehler beim Aktualisieren der Daten');
     }
 }
+
+async function handleDirectDownload() {
+    console.log('Direct download without saving changes - starting download and showing complete state');
+
+    try {
+        // Get job info first
+        const response = await fetch(`${API_BASE}/api/jobs/${currentJobId}`);
+
+        if (!response.ok) {
+            throw new Error('Fehler beim Abrufen der Job-Informationen');
+        }
+
+        const job = await response.json();
+
+        // Trigger the actual download immediately
+        const downloadUrl = `${API_BASE}/api/download/${currentJobId}`;
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `kontoauszug_${currentJobId.slice(0, 8)}.${job.output_format || 'xlsx'}`;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        console.log('Download started, now showing complete state');
+
+        // Show complete state immediately (without updating data)
+        showComplete(job);
+
+    } catch (error) {
+        console.error('Error during direct download:', error);
+        showError(error.message || 'Fehler beim Herunterladen der Datei');
+    }
+}
+

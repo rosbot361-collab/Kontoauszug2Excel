@@ -1099,8 +1099,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .bg-background{
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 50%, #BFDBFE 100%);
 }
 
 .bg-black{
@@ -1568,7 +1567,744 @@ h1, h2, h3, h4, h5, h6{
   color: #111827; /* darker on hover */
 }
 
-body {
-  background: linear-gradient(100deg, #EFF6FF 0%, #DBEAFE 50%, #BFDBFE 100%);
-  min-height: 100vh;
+/* Review stage icon-only buttons */
+#reviewState .action-icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 56px; /* circle or rounded square */
+  height: 56px;
+  border-radius: 12px;
+  border: 2px solid;
+  background: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Individual colors */
+#reviewState #directDownloadBtn.action-icon-btn {
+  border-color: #10B981; /* success green */
+  color: #10B981;
+}
+#reviewState #confirmDownloadBtn.action-icon-btn {
+  border-color: #2563EB; /* primary blue */
+  color: #2563EB;
+}
+#reviewState #deleteReviewBtn.action-icon-btn {
+  border-color: #DC2626; /* red */
+  color: #DC2626;
+}
+
+/* Hover states */
+#reviewState .action-icon-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+#reviewState #directDownloadBtn:hover {
+  border-color: #059669;
+  color: #059669;
+}
+#reviewState #confirmDownloadBtn:hover {
+  border-color: #1D4ED8;
+  color: #1D4ED8;
+}
+#reviewState #deleteReviewBtn:hover {
+  border-color: #B91C1C;
+  color: #B91C1C;
+}
+/* ============================================
+   ENHANCED EFFECTS & ANIMATIONS
+   KontoExport Enhanced Styles
+   ============================================ */
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ============================================
+   ANIMATED BACKGROUND GRADIENTS
+   ============================================ */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(30, 58, 138, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
+    z-index: -1;
+    animation: backgroundPulse 20s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes backgroundPulse {
+    0%, 100% {
+        transform: scale(1) translate(0, 0);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05) translate(10px, 10px);
+        opacity: 0.8;
+    }
+}
+
+/* ============================================
+   GLASSMORPHISM UTILITIES
+   ============================================ */
+.glass {
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+}
+
+.glass-dark {
+    background: rgba(31, 41, 55, 0.85) !important;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* ============================================
+   ENHANCED BUTTON EFFECTS
+   ============================================ */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-primary:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* ============================================
+   ENHANCED CARD HOVER EFFECTS
+   ============================================ */
+.shadow-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shadow-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Top gradient line on hover */
+.rounded-xl.shadow-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.rounded-xl.shadow-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, rgb(30, 58, 138), rgb(59, 130, 246), rgb(16, 185, 129));
+    transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rounded-xl.shadow-card:hover::before {
+    left: 0;
+}
+
+/* ============================================
+   NAVIGATION LINK EFFECTS
+   ============================================ */
+nav a.hover\:text-primary {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+nav a.hover\:text-primary::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgb(30, 58, 138), rgb(59, 130, 246));
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+nav a.hover\:text-primary:hover::after {
+    width: 80%;
+}
+
+/* ============================================
+   PRICING CARD ENHANCEMENTS
+   ============================================ */
+.md\:scale-105 {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+    .md\:scale-105:hover {
+        transform: scale(1.08) translateY(-8px) !important;
+        box-shadow: 0 20px 40px rgba(30, 58, 138, 0.2) !important;
+    }
+}
+
+/* Pulse animation for recommended badge */
+@keyframes badgePulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(30, 58, 138, 0.4);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(30, 58, 138, 0);
+        transform: scale(1.02);
+    }
+}
+
+.border-2.border-primary {
+    animation: badgePulse 3s ease-in-out infinite;
+}
+
+/* ============================================
+   FEATURE ICONS FLOAT ANIMATION
+   ============================================ */
+.bg-primary-50, .bg-accent-50, .bg-secondary-50 {
+    transition: all 0.3s ease;
+}
+
+.w-12.h-12.bg-primary-50,
+.w-12.h-12.bg-accent-50,
+.w-12.h-12.bg-secondary-50,
+.w-16.h-16.bg-primary-50,
+.w-16.h-16.bg-accent-50,
+.w-16.h-16.bg-secondary-50 {
+    animation: float 4s ease-in-out infinite;
+}
+
+.w-12.h-12.bg-primary-50:hover,
+.w-12.h-12.bg-accent-50:hover,
+.w-12.h-12.bg-secondary-50:hover,
+.w-16.h-16.bg-primary-50:hover,
+.w-16.h-16.bg-accent-50:hover,
+.w-16.h-16.bg-secondary-50:hover {
+    transform: translateY(-8px) rotate(5deg);
+    box-shadow: 0 8px 16px rgba(30, 58, 138, 0.15);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+/* ============================================
+   ENHANCED PROGRESS BAR
+   ============================================ */
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ============================================
+   GRADIENT TEXT EFFECT
+   ============================================ */
+.gradient-text {
+    background: linear-gradient(135deg, rgb(30, 58, 138) 0%, rgb(59, 130, 246) 50%, rgb(16, 185, 129) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+}
+
+/* ============================================
+   TOOLTIPS (Pure CSS)
+   ============================================ */
+.tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.tooltip::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    padding: 0.5rem 1rem;
+    background: rgb(31, 41, 55);
+    color: white;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: rgb(31, 41, 55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.tooltip:hover::before {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+}
+
+/* ============================================
+   SKELETON LOADING
+   ============================================ */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 8px;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ============================================
+   FOCUS STATES FOR ACCESSIBILITY
+   ============================================ */
+*:focus-visible {
+    outline: 2px solid rgb(59, 130, 246);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Enhanced form focus */
+input:focus, select:focus, textarea:focus {
+    border-color: rgb(59, 130, 246) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    transform: translateY(-1px);
+    transition: all 0.3s ease;
+}
+
+/* ============================================
+   SCROLL REVEAL ANIMATIONS
+   ============================================ */
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.scroll-reveal {
+    animation: reveal 0.6s ease-out;
+}
+
+/* Staggered animations */
+.scroll-reveal:nth-child(1) { animation-delay: 0.1s; }
+.scroll-reveal:nth-child(2) { animation-delay: 0.2s; }
+.scroll-reveal:nth-child(3) { animation-delay: 0.3s; }
+.scroll-reveal:nth-child(4) { animation-delay: 0.4s; }
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(241, 245, 249);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgb(30, 58, 138), rgb(59, 130, 246));
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgb(29, 78, 216), rgb(37, 99, 235));
+}
+
+/* ============================================
+   TEXT SELECTION STYLING
+   ============================================ */
+::selection {
+    background: rgb(59, 130, 246);
+    color: white;
+}
+
+::-moz-selection {
+    background: rgb(59, 130, 246);
+    color: white;
+}
+
+/* ============================================
+   MICRO-INTERACTIONS
+   ============================================ */
+
+/* Smooth link transitions */
+a {
+    transition: all 0.2s ease;
+}
+
+/* Image hover effects */
+img {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.02);
+}
+
+/* Input animations */
+input, select, textarea {
+    transition: all 0.3s ease;
+}
+
+/* Table row hover */
+table tr {
+    transition: background-color 0.2s ease;
+}
+
+table tr:hover {
+    background-color: rgba(59, 130, 246, 0.03);
+}
+
+/* ============================================
+   RESPONSIVE ENHANCEMENTS
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .glass,
+    .glass-dark {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    body::before {
+        animation: none;
+        opacity: 0.5;
+    }
+
+    /* Disable float animations on mobile */
+    .w-12.h-12.bg-primary-50,
+    .w-12.h-12.bg-accent-50,
+    .w-12.h-12.bg-secondary-50,
+    .w-16.h-16.bg-primary-50,
+    .w-16.h-16.bg-accent-50,
+    .w-16.h-16.bg-secondary-50 {
+        animation: none;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    body::before,
+    body::after,
+    .btn-primary::before,
+    .shadow-card::before {
+        display: none !important;
+    }
+
+    .shadow-card, .shadow-modal {
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+    }
+}
+
+/* Toggle smoother animation and color transitions */
+#billingToggle {
+  transition: background 0.5s ease, transform 0.3s ease;
+}
+
+#billingToggle.active {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
+}
+
+#toggleButton {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+
+#toggleButton.bounce {
+  animation: bounceToggle 0.3s ease;
+}
+
+/* Kleine Bounce-Animation */
+@keyframes bounceToggle {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* Pricing Page Specific Enhancements */
+
+/* Smooth Professional Card Hover */
+.hover\:md\:scale-108:hover {
+    transform: scale(1.08) translateY(-10px) !important;
+    box-shadow: 0 25px 50px rgba(30, 58, 138, 0.25) !important;
+}
+
+/* Enhanced Toggle Switch */
+#billingToggle {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+}
+
+#billingToggle[aria-checked="true"] {
+    background: linear-gradient(135deg, rgb(30, 58, 138) 0%, rgb(59, 130, 246) 100%);
+}
+
+#toggleButton {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#billingToggle[aria-checked="true"] #toggleButton {
+    transform: translateX(2.25rem) !important;
+}
+
+/* Label animations */
+#monthlyLabel, #yearlyLabel {
+    will-change: color, transform;
+}
+
+#monthlyLabel.active, #yearlyLabel.active {
+    transform: scale(1.05);
+}
+
+/* Pulse animation for badge */
+@keyframes badge-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+.animate-pulse {
+    animation: badge-pulse 2s ease-in-out infinite;
+}
+
+/* Fade-in animation for pricing cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.scroll-reveal {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Stagger the feature cards */
+.grid > div:nth-child(1) { animation-delay: 0.1s; }
+.grid > div:nth-child(2) { animation-delay: 0.2s; }
+.grid > div:nth-child(3) { animation-delay: 0.3s; }
+.grid > div:nth-child(4) { animation-delay: 0.4s; }
+.grid > div:nth-child(5) { animation-delay: 0.5s; }
+.grid > div:nth-child(6) { animation-delay: 0.6s; }
+.grid > div:nth-child(7) { animation-delay: 0.7s; }
+.grid > div:nth-child(8) { animation-delay: 0.8s; }
+.grid > div:nth-child(9) { animation-delay: 0.9s; }
+
+/* Feature icon glow effect - disabled */
+/* .group:hover .w-16 {
+    box-shadow: 0 0 30px rgba(30, 58, 138, 0.4);
+} */
+
+/* Smooth transitions for all elements */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Professional card border glow - disabled */
+/* .border-2.border-primary {
+    box-shadow: 0 0 0 1px rgba(30, 58, 138, 0.1);
+    transition: all 0.5s ease-out;
+}
+
+.border-2.border-primary:hover {
+    box-shadow: 0 0 0 1px rgba(30, 58, 138, 0.3), 0 0 30px rgba(30, 58, 138, 0.2);
+} */
+
+/* Price number animation */
+.monthly-price, .yearly-price {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.monthly-price.hidden, .yearly-price.hidden {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* Enhanced Price Display Styling */
+.price-display {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 900 !important;
+    background: linear-gradient(135deg, rgb(30, 58, 138) 0%, rgb(59, 130, 246) 50%, rgb(30, 58, 138) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.03em;
+    transition: all 0.3s ease;
+}
+
+.price-display:hover {
+    transform: scale(1.05);
+}
+
+/* Enhanced Plan Button Effect - Removed to avoid conflicts with main btn-primary styles */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hover\:md\:scale-108:hover {
+        transform: none !important;
+    }
+
+    .scroll-reveal {
+        animation: none;
+    }
+}
+
+/* Larger icons + more spacing for feature section */
+.feature-icons {
+  margin-top: 5.75rem; /* pushes them further down */
+}
+
+.feature-icons svg {
+  width: 2rem; /* larger icons */
+  height: 2rem;
+}
+
+.feature-icons h4 {
+  font-size: 1rem; /* text-lg */
+}
+
+.feature-icons p {
+  font-size: 0.875rem; /* text-sm */
+}
+
+/* Default: show features */
+.feature-icons {
+  display: grid;
+}
+
+/* Hide features when other states are visible */
+#processingState:not(.hidden) + .feature-icons,
+#reviewState:not(.hidden) + .feature-icons,
+#completeState:not(.hidden) + .feature-icons,
+#errorState:not(.hidden) + .feature-icons {
+  display: none !important;
+}
+
+
+/* Bigger, nicely aligned buttons */
+.review-buttons {
+  gap: 0;
+  width: 100%;
+}
+
+.review-buttons > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.review-buttons > div:first-child {
+  align-items: flex-start;
+}
+
+.review-buttons > div:last-child {
+  align-items: flex-end;
+}
+
+/* Make icons + labels larger */
+.review-buttons button svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.review-buttons p {
+  font-size: 0.9rem;
+}
+
+#uploadState, #processingState, #reviewState, #completeState, #errorState {
+  transition: opacity 0.3s ease;
 }
