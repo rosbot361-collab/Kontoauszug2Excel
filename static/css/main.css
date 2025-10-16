@@ -1099,7 +1099,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .bg-background{
-  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 50%, #BFDBFE 100%);
+  background: linear-gradient(90deg, #F9FAFB 0%, #ffffff 50%, #ffffff 100%);
 }
 
 .bg-black{
@@ -2274,25 +2274,21 @@ table tr:hover {
 }
 
 
-/* Bigger, nicely aligned buttons */
+/* Bigger, nicely aligned buttons - centered layout */
 .review-buttons {
-  gap: 0;
+  gap: 2rem;
   width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  justify-content: center;
 }
 
 .review-buttons > div {
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.review-buttons > div:first-child {
-  align-items: flex-start;
-}
-
-.review-buttons > div:last-child {
-  align-items: flex-end;
+  text-align: center;
 }
 
 /* Make icons + labels larger */
@@ -2303,6 +2299,9 @@ table tr:hover {
 
 .review-buttons p {
   font-size: 0.9rem;
+  text-align: center;
+  max-width: 150px;
+  margin-top: 1rem;
 }
 
 #uploadState, #processingState, #reviewState, #completeState, #errorState {
